@@ -1,0 +1,74 @@
+{
+  "name": "html-sandbox",
+  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "config": {
+    "directory": {
+      "dev": "_dev",
+      "dest": "htdocs"
+    },
+    "fileExtension": {
+      "pug": "pug",
+      "sass": "sass,scss",
+      "js": "ts,tsx,js,jsx",
+      "image": "jpg,jpeg,png,gif,svg",
+      "resource": "txt,pdf"
+    }
+  },
+  "scripts": {
+    "reinstall": "rm -rf $npm_package_config_directory_dest node_modules yarn.lock yarn-error.log && yarn install",
+    "clean": "rm -rf $npm_package_config_directory_dest",
+    "dev": "yarn clean && yarn webpack-dev-server --open --inline",
+    "test": "yarn jest",
+    "build": "yarn clean && NODE_ENV=production webpack"
+  },
+  "eslintIgnore": [
+    "htdocs/*"
+  ],
+  "dependencies": {
+    "core-js": "3.6.4"
+  },
+  "devDependencies": {
+    "@babel/core": "7.8.4",
+    "@babel/plugin-proposal-class-properties": "7.8.3",
+    "@babel/preset-env": "7.8.4",
+    "@babel/preset-typescript": "7.8.3",
+    "@types/jest": "25.1.3",
+    "@typescript-eslint/eslint-plugin": "2.20.0",
+    "@typescript-eslint/parser": "2.20.0",
+    "autoprefixer": "9.7.4",
+    "babel-loader": "8.0.6",
+    "copy-webpack-plugin": "5.1.1",
+    "css-loader": "3.4.2",
+    "cssnano": "4.1.10",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jest": "23.7.0",
+    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "glob": "7.1.6",
+    "html-webpack-plugin": "3.2.0",
+    "imagemin-webpack-plugin": "2.4.2",
+    "jest": "25.1.0",
+    "mini-css-extract-plugin": "0.9.0",
+    "node-sass": "4.13.1",
+    "node-sass-glob-importer": "5.3.2",
+    "postcss-flexbugs-fixes": "4.2.0",
+    "postcss-loader": "3.0.0",
+    "prettier": "1.19.1",
+    "pug": "2.0.4",
+    "pug-loader": "2.4.0",
+    "sass-loader": "8.0.2",
+    "ts-jest": "25.2.1",
+    "typescript": "3.7.5",
+    "webpack": "4.41.6",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.10.3",
+    "webpack-fix-style-only-entries": "0.4.0"
+  }
+}

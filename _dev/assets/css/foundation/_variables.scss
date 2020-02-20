@@ -1,0 +1,19 @@
+//
+// Define variables
+//
+
+// Fonts
+$font-family-base: system-ui, -apple-system, Roboto, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-monospace: Menlo, Consolas, "Roboto Mono", monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+
+// Colors
+$color-black: #000;
+$color-white: #fff;
+
+// Breakpoints
+$breakpoints: (
+  s: 544px,
+  m: 768px,
+  l: 992px,
+  xl: 1200px
+) !default;

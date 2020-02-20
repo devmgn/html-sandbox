@@ -1,0 +1,36 @@
+// Mediaquery min-width
+//
+// $width - string, number or defined breakpoint name
+
+=media-min($width)
+  $width: strip-unit($width)
+  @if type-of($width) == 'number'
+    @media (min-width: #{$width}px)
+      @content
+  @else
+    @media (min-width: map-get($breakpoints, $width))
+      @content
+
+// Mediaquery max-width
+//
+// $width - string, number or defined breakpoint name
+
+=media-max($width)
+  $width: strip-unit($width)
+  @warn $width
+  @if type-of($width) == 'number'
+    @media (max-width: $width - 1px)
+      @content
+  @else
+    @media (max-width: map-get($breakpoints, $width) - 1px)
+      @content
+
+// Mediaquery between width
+//
+// $lower-width - string, number or defined breakpoint name
+// $upper-width - string, number or defined breakpoint name
+
+=media-between($lower-width, $upper-width)
+  +media-min($lower-width)
+    +media-max($upper-width)
+      @content

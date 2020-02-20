@@ -1,0 +1,14 @@
+block variables
+meta(charset="UTF-8")
+meta(name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0")
+meta(http-equiv="X-UA-Compatible" content="ie=edge")
+- if (title)
+  title=title
+- if (description)
+  meta(name="description" content= description)
+- if (styles)
+  each style in styles
+    link(rel="stylesheet" href= style)
+- if (scripts)
+  each script in scripts
+    script(src= script)

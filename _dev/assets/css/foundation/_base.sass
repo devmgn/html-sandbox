@@ -1,0 +1,224 @@
+//
+// base & reset styles
+//
+
+// =============================================================================
+// Global
+// =============================================================================
+
+*,
+::before,
+::after
+  box-sizing: border-box
+
+::before,
+::after
+  text-decoration: inherit
+  vertical-align: inherit
+
+// =============================================================================
+// Document
+// =============================================================================
+
+// 1. Remove the grey highlight on links in iOS
+// 2. Improving font rendering in macOS
+// 3. Prevent adjustments of font size after orientation changes in iOS
+html
+  box-sizing: border-box
+  font-family: $font-family-base
+  line-height: 1
+  -webkit-tap-highlight-color: transparent // 1
+  -webkit-font-smoothing: antialiased // 2
+  -moz-osx-font-smoothing: grayscale // 2
+  -webkit-text-size-adjust: 100% // 3
+
+// =============================================================================
+// Sections
+// =============================================================================
+
+body
+  margin: 0
+
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6
+//   margin-top: 0
+//   margin-bottom: 0
+//   font-weight: normal
+//   font-size: 100%
+
+// address
+//   font-style: normal
+
+// =============================================================================
+// Grouping content
+// =============================================================================
+
+// Add the correct display in IE.
+main
+  display: block
+
+p
+  margin-top: 0
+  margin-bottom: 0
+
+ol,
+ul
+  list-style-type: none
+  margin-top: 0
+  margin-bottom: 0
+  padding-left: 0
+
+dl
+  margin-top: 0
+  margin-bottom: 0
+
+dd
+  margin-left: 0
+
+// figure
+//   margin: 0
+
+// hr
+//   margin: 0
+//   border-style: none
+
+// pre
+//   margin-top: 0
+//   margin-bottom: 0
+
+// blockquote
+//   margin: 0
+
+// =============================================================================
+// Text-level semantics
+// =============================================================================
+
+// small
+//   font-size: 1em
+
+// b,
+// strong
+//   font-weight: normal
+
+// i, cite, em, var, dfn
+//   font-style: normal
+
+// sup,
+// sub
+//   font-size: 75%
+//   line-height: 0
+
+// q
+//   &::before,
+//   &::after
+//     content: none
+
+// mark
+//   background-color: transparent
+//   color: inherit
+
+// abbr[title]
+//   text-decoration: none
+
+// code, kbd, samp
+//   font-family: $font-family-monospace
+
+// =============================================================================
+// Embedded content
+// =============================================================================
+
+// audio,
+// canvas,
+// iframe,
+// svg,
+// video
+img
+  vertical-align: middle
+
+// Change the fill color to match the text color in all browsers
+// svg:not([fill])
+//   fill: currentColor
+
+// Hide the overflow in IE.
+// svg:not(:root)
+//   overflow: hidden
+
+// iframe
+//   border-style: none
+
+// =============================================================================
+// Tabular data
+// =============================================================================
+
+// table
+//   border-collapse: collapse
+//   border-spacing: 0
+
+// caption,
+// th
+//   text-align: left
+
+// thead,
+// tbody,
+// tfoot
+//   vertical-align: inherit
+
+// td,
+// th
+//   padding: 0
+
+// th
+//   font-weight: inherit
+
+// =============================================================================
+// Forms
+// =============================================================================
+
+// fieldset
+//   margin-right: 0
+//   margin-left: 0
+//   padding: 0
+//   min-width: 0
+//   border-style: none
+
+// legend
+//   padding-right: 0
+//   padding-left: 0
+
+// input,
+// textarea,
+// select,
+// button
+//   margin: 0
+//   padding: 0
+//   border-style: none
+//   border-radius: 0
+//   background-color: transparent
+//   color: inherit
+//   font: inherit
+//   &::placeholder
+//     color: inherit
+//   &::-moz-placeholder
+//     opacity: 1
+
+// textarea
+//   overflow: auto
+//   resize: vertical
+
+// =============================================================================
+// User interaction
+// =============================================================================
+
+// Remove the tapping delay on clickable elements
+// a,
+// button,
+// input,
+// label,
+// select,
+// textarea,
+// [tabindex]
+//   touch-action: manipulation
