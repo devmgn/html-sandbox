@@ -4,6 +4,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path')
 const { directory } = require('./config')
 
 module.exports = {
@@ -12,12 +13,12 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   moduleNameMapper: {
-    '^@/(.*)$': `${directory.dev}/$1`
+    '^@/(.*)$': path.resolve(directory.dev, directory.js, '$1')
   },
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.json'
     }
   },
-  testMatch: [`${directory.dev}/**/?(*.)(spec|test).(ts|js)?(x)`]
+  testMatch: [`${directory.root}/test/**/?(*.)(spec|test).(ts|js)?(x)`]
 }

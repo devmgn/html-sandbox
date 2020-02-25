@@ -7,6 +7,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 const glob = require('glob')
 const path = require('path')
+const ip = require('ip').address
 const nodeSassGlobImporter = require('node-sass-glob-importer')
 
 // webpack plugins
@@ -21,7 +22,7 @@ const ENV = process.env.NODE_ENV
 
 // TODO: Organize configuration
 module.exports = () => {
-  const getEntry = () => {
+  const getEntries = () => {
     return glob
       .sync(`**/?(*.)bundle.{${[fileExtension.js, fileExtension.sass].join(',')}}`, {
         cwd: directory.dev
@@ -36,22 +37,26 @@ module.exports = () => {
       }, {})
   }
 
-  const getTestPattern = extensions => new RegExp(`.(${extensions.replace(/,/g, '|')})$`)
+  const createTestRegex = extensions => new RegExp(`.(${extensions.replace(/,/g, '|')})$`)
 
   return {
     mode: ENV || 'development',
-    entry: getEntry(),
+    entry: getEntries(),
     output: {
       path: directory.dest,
       filename: '[name].js',
       publicPath: '/'
     },
     devtool: ENV || 'inline-cheap-module-source-map',
+    devServer: {
+      host: ip(),
+      disableHostCheck: true
+    },
     module: {
       rules: [
         // JavaScript
         {
-          test: getTestPattern(fileExtension.js),
+          test: createTestRegex(fileExtension.js),
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
@@ -60,7 +65,7 @@ module.exports = () => {
         },
         // Sass
         {
-          test: getTestPattern(fileExtension.sass),
+          test: createTestRegex(fileExtension.sass),
           use: [
             { loader: MiniCssExtractPlugin.loader },
             {
@@ -97,7 +102,7 @@ module.exports = () => {
     },
     resolve: {
       alias: {
-        '@': `${directory.dev}/assets/js/`
+        '@': path.resolve(directory.dev, directory.js)
       },
       extensions: fileExtension.js.split(',').map(extension => `.${extension}`)
     },
@@ -105,7 +110,7 @@ module.exports = () => {
       splitChunks: {
         chunks: 'initial',
         minChunks: 2,
-        name: 'assets/js/vendor'
+        name: path.join(directory.js, 'vendor')
       }
     },
     plugins: [
