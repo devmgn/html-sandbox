@@ -20,5 +20,5 @@ module.exports = {
       tsConfig: 'tsconfig.json'
     }
   },
-  testMatch: [`${directory.root}/test/**/?(*.)(spec|test).(ts|js)?(x)`]
+  testMatch: [path.resolve(directory.root, 'test/**/?(*.)(spec|test).(ts|js)?(x)')]
 }
