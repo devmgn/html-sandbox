@@ -3,24 +3,18 @@
  * - https://eslint.org
  */
 
+const path = require('path')
+const { directory } = require('./config')
+
 module.exports = {
   root: true,
   env: {
+    es6: true,
     browser: true,
     'jest/globals': true
   },
-  extends: [
-    'standard',
-    'plugin:prettier/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
-  ],
-  plugins: [
-    'prettier',
-    '@typescript-eslint',
-    'jest'
-  ],
-  parser: '@typescript-eslint/parser',
+  extends: ['standard', 'plugin:prettier/recommended'],
+  plugins: ['prettier', 'jest'],
   parserOptions: {
     sourceType: 'module',
     project: 'tsconfig.json',
@@ -48,5 +42,14 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  overrides: [
+    {
+      files: ['**/*.{ts,tsx}'],
+      extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
+      plugins: ['@typescript-eslint'],
+      parser: '@typescript-eslint/parser'
+    }
+  ],
+  ignorePatterns: ['node_modules', path.relative(directory.root, directory.dest)]
 }

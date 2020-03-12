@@ -17,7 +17,6 @@
 
 =media-max($width)
   $width: strip-unit($width)
-  @warn $width
   @if type-of($width) == 'number'
     @media (max-width: $width - 1px)
       @content

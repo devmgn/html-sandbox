@@ -6,9 +6,14 @@ meta(http-equiv="X-UA-Compatible" content="ie=edge")
   title=title
 - if (description)
   meta(name="description" content= description)
+- const chunks = htmlWebpackPlugin.files
 - if (styles)
   each style in styles
-    link(rel="stylesheet" href=(`${style}?=${new Date().getTime()}`))
+    - const stylePath = chunks.css.find(src => src.includes(style.replace('.css', '')))
+    - if (stylePath)
+      link(rel="stylesheet" href= stylePath)
 - if (scripts)
   each script in scripts
-    script(src=(`${script}?=${new Date().getTime()}`) defer)
+    - const scriptPath = chunks.js.find(src => src.includes(script.replace('.js', '')))
+    - if (scriptPath)
+      script(src= scriptPath defer)
