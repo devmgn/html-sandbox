@@ -13,7 +13,7 @@ module.exports = {
     browser: true,
     'jest/globals': true
   },
-  extends: ['standard', 'plugin:prettier/recommended'],
+  extends: ['standard', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
   plugins: ['prettier', 'jest'],
   parserOptions: {
     sourceType: 'module',
@@ -51,5 +51,5 @@ module.exports = {
       parser: '@typescript-eslint/parser'
     }
   ],
-  ignorePatterns: ['node_modules', path.relative(directory.root, directory.dest)]
+  ignorePatterns: ['node_modules', directory.dest]
 }

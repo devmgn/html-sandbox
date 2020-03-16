@@ -13,12 +13,12 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   moduleNameMapper: {
-    '^@/(.*)$': path.resolve(directory.dev, directory.js, '$1')
+    '^@/(.*)$': path.join('<rootDir>', directory.dev, directory.js, '$1')
   },
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.json'
     }
   },
-  testMatch: [path.resolve(directory.root, 'test/**/?(*.)(spec|test).(ts|js)?(x)')]
+  testMatch: [path.join('<rootDir>', 'test/**/?(*.)(spec|test).(ts|js)?(x)')]
 }
