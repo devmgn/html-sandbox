@@ -13,12 +13,15 @@ path.toAbsolutePath = input => (path.isAbsolute(input) ? input : path.join(path.
 
 Object.assign(config.directory, {
   root,
-  dev: path.toRelativePath(path.normalize(config.directory.dev)),
-  dest: path.toRelativePath(path.normalize(config.directory.dest)),
+  src: path.toRelativePath(path.normalize(config.directory.src)),
+  dist: path.toRelativePath(path.normalize(config.directory.dist)),
   publicPath: path.toAbsolutePath(path.normalize(config.directory.publicPath)),
   css: path.toRelativePath(path.normalize(config.directory.css)),
   js: path.toRelativePath(path.normalize(config.directory.js)),
-  images: path.toRelativePath(path.normalize(config.directory.images))
+  images: path.toRelativePath(path.normalize(config.directory.images)),
+  fonts: path.toRelativePath(path.normalize(config.directory.fonts))
 })
+
+config.svgoOptions = { plugins: [{ removeViewBox: false }] }
 
 module.exports = config
