@@ -11,7 +11,7 @@ module.exports = {
   env: {
     es6: true,
     browser: true,
-    'jest/globals': true
+    'jest/globals': true,
   },
   extends: ['standard', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
   plugins: ['prettier', 'jest'],
@@ -19,8 +19,8 @@ module.exports = {
     sourceType: 'module',
     project: 'tsconfig.json',
     ecmaFeatures: {
-      jsx: true
-    }
+      jsx: true,
+    },
   },
   rules: {
     'no-console': 0,
@@ -29,8 +29,8 @@ module.exports = {
       {
         printWidth: 120,
         singleQuote: true,
-        semi: false
-      }
+        semi: false,
+      },
     ],
     'no-multi-spaces': [
       'error',
@@ -38,18 +38,18 @@ module.exports = {
         exceptions: {
           ImportDeclaration: true,
           Property: false,
-          VariableDeclarator: true
-        }
-      }
-    ]
+          VariableDeclarator: true,
+        },
+      },
+    ],
   },
   overrides: [
     {
       files: ['**/*.{ts,tsx}'],
       extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
       plugins: ['@typescript-eslint'],
-      parser: '@typescript-eslint/parser'
-    }
+      parser: '@typescript-eslint/parser',
+    },
   ],
-  ignorePatterns: ['node_modules', directory.dist]
+  ignorePatterns: ['node_modules', directory.dist],
 }

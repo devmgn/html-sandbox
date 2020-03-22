@@ -16,7 +16,7 @@ module.exports = {
     flexbugsFixes(),
     autoprefixer(),
     cssnano({
-      preset: ['default', { calc: false, reduceInitial: false, svgo: svgoOptions }]
-    })
-  ]
+      preset: ['default', { calc: false, reduceInitial: false, svgo: svgoOptions }],
+    }),
+  ],
 }

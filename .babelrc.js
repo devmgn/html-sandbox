@@ -11,15 +11,15 @@ module.exports = {
         modules: false,
         useBuiltIns: 'usage',
         corejs: 3,
-        debug: false
-      }
+        debug: false,
+      },
     ],
-    '@babel/preset-typescript'
+    '@babel/preset-typescript',
   ],
   plugins: ['@babel/plugin-proposal-class-properties'],
   env: {
     test: {
-      presets: [['@babel/preset-env', { targets: { node: 'current' } }]]
-    }
-  }
+      presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+    },
+  },
 }

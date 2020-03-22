@@ -23,7 +23,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
 const { directory, fileExtension, svgoOptions } = require('./config')
-const { ExtensionString } = require('./webpack.utilities')
+const { ExtensionString, ConvertPath } = require('./utilities')
 
 const getMultipleEntry = () => {
   const sassFileTypes = ExtensionString.toGlobFileTypes(fileExtension.sass)
@@ -33,7 +33,7 @@ const getMultipleEntry = () => {
     .reduce((entry, src) => {
       const name = path.format({
         dir: path.dirname(src),
-        name: path.basename(src, path.extname(src))
+        name: path.basename(src, path.extname(src)),
       })
       entry[name] = path.resolve(directory.src, src)
       return entry
@@ -47,7 +47,7 @@ module.exports = () => {
     output: {
       path: path.join(directory.root, directory.dist, directory.publicPath),
       filename: '[name]-[contenthash:16].js',
-      publicPath: directory.publicPath
+      publicPath: directory.publicPath,
     },
     module: {
       rules: [
@@ -57,8 +57,8 @@ module.exports = () => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: { cacheDirectory: true }
-          }
+            options: { cacheDirectory: true },
+          },
         },
         // Sass
         {
@@ -67,20 +67,20 @@ module.exports = () => {
             { loader: MiniCssExtractPlugin.loader },
             {
               loader: 'css-loader',
-              options: { sourceMap: true }
+              options: { sourceMap: true },
             },
             {
               loader: 'postcss-loader',
-              options: { sourceMap: true }
+              options: { sourceMap: true },
             },
             {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
-                sassOptions: { importer: nodeSassGlobImporter() }
-              }
-            }
-          ]
+                sassOptions: { importer: nodeSassGlobImporter() },
+              },
+            },
+          ],
         },
         // Pug
         {
@@ -90,10 +90,10 @@ module.exports = () => {
               loader: 'pug-loader',
               options: {
                 pretty: true,
-                root: path.join(directory.root, directory.src)
-              }
-            }
-          ]
+                root: path.join(directory.root, directory.src),
+              },
+            },
+          ],
         },
         // Assets
         {
@@ -105,49 +105,53 @@ module.exports = () => {
                 limit: parseInt(1024 / 4),
                 name: '[name]-[contenthash:16].[ext]',
                 outputPath: (url, resourcePath) =>
-                  path.join(path.dirname(path.relative(directory.src, resourcePath)), url)
-              }
+                  path.join(path.dirname(path.relative(directory.src, resourcePath)), url),
+              },
             },
             {
               loader: 'img-loader',
               options: {
-                plugins: [imageminJpegtran(), imageminGifsicle(), imageminOptipng(), imageminSvgo(svgoOptions)]
-              }
-            }
-          ]
-        }
-      ]
+                plugins: [imageminJpegtran(), imageminGifsicle(), imageminOptipng(), imageminSvgo(svgoOptions)],
+              },
+            },
+          ],
+        },
+      ],
     },
     resolve: {
       alias: {
-        '@': path.join(directory.root, directory.src, directory.js)
+        '@': path.join(directory.root, directory.src, directory.js),
       },
       modules: ['node_modules', path.join(directory.src, directory.images), path.join(directory.src, directory.fonts)],
-      extensions: ExtensionString.toArray(fileExtension.js)
+      extensions: ExtensionString.toArray(fileExtension.js),
     },
     optimization: {
       splitChunks: {
         chunks: 'initial',
         minChunks: 2,
-        name: path.join(directory.js, 'vendor')
-      }
+        name: path.join(directory.js, 'vendor'),
+      },
     },
     plugins: [
       ...glob
         .sync(`**/[!_]*.${ExtensionString.toGlobFileTypes(fileExtension.template)}`, { cwd: directory.src })
-        .map(src => {
+        .map((src) => {
           return new HtmlWebpackPlugin({
             template: path.join(directory.src, src),
             filename: path.format({
               dir: path.dirname(src),
               name: path.basename(src, path.extname(src)),
-              ext: '.html'
+              ext: '.html',
             }),
             inject: false,
             minify: {
+              // HTMLMinifier
+              // @see https://github.com/DanielRuf/html-minifier-terser#options-quick-reference
+              removeStyleLinkTypeAttributes: true,
               removeScriptTypeAttributes: true,
-              collapseWhitespace: !!ENV
-            }
+              collapseBooleanAttributes: true,
+              collapseWhitespace: !!ENV,
+            },
           })
         }),
       new MiniCssExtractPlugin({ filename: '[name]-[contenthash:16].css' }),
@@ -155,14 +159,14 @@ module.exports = () => {
       new CopyWebpackPlugin([
         {
           from: path.join(directory.src, `**/*.{${ExtensionString.toGlobFileTypes(fileExtension.resource)}}`),
-          to: path.join(directory.root, directory.dist, directory.publicPath, '[name].[ext]')
-        }
+          to: path.join(directory.root, directory.dist, directory.publicPath, '[name].[ext]'),
+        },
       ]),
       new FriendlyErrorsWebpackPlugin(),
-      new CleanWebpackPlugin()
+      new CleanWebpackPlugin(),
     ],
     devtool: ENV || 'inline-cheap-module-source-map',
-    devServer: { openPage: directory.publicPath.replace(path.sep, '') },
-    stats: 'none'
+    devServer: { openPage: ConvertPath.toRelativePath(directory.publicPath) },
+    stats: 'none',
   }
 }

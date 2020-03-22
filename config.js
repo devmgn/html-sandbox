@@ -4,24 +4,22 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
-const root = path.resolve(__dirname)
-const { config } = require(path.join(root, 'package.json'))
-
-// extend path
-path.toRelativePath = input => (path.isAbsolute(input) ? input.replace(path.parse(input).root, '') : input)
-path.toAbsolutePath = input => (path.isAbsolute(input) ? input : path.join(path.sep, input))
+const { config } = require('./package.json') // import configures from `package.json`
+const { ConvertPath } = require('./utilities')
 
 Object.assign(config.directory, {
-  root,
-  src: path.toRelativePath(path.normalize(config.directory.src)),
-  dist: path.toRelativePath(path.normalize(config.directory.dist)),
-  publicPath: path.toAbsolutePath(path.normalize(config.directory.publicPath)),
-  css: path.toRelativePath(path.normalize(config.directory.css)),
-  js: path.toRelativePath(path.normalize(config.directory.js)),
-  images: path.toRelativePath(path.normalize(config.directory.images)),
-  fonts: path.toRelativePath(path.normalize(config.directory.fonts))
+  root: path.resolve(__dirname),
+  src: ConvertPath.toRelativePath(config.directory.src),
+  dist: ConvertPath.toRelativePath(config.directory.dist),
+  publicPath: ConvertPath.toAbsolutePath(config.directory.publicPath),
+  css: ConvertPath.toRelativePath(config.directory.css),
+  js: ConvertPath.toRelativePath(config.directory.js),
+  images: ConvertPath.toRelativePath(config.directory.images),
+  fonts: ConvertPath.toRelativePath(config.directory.fonts),
 })
 
+// svgo options
+// @see https://github.com/svg/svgo#what-it-can-do
 config.svgoOptions = { plugins: [{ removeViewBox: false }] }
 
 module.exports = config
