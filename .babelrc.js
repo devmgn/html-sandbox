@@ -1,6 +1,6 @@
 /**
  * Babel configuration
- * https://babeljs.io
+ * @see https://babeljs.io
  */
 
 module.exports = {

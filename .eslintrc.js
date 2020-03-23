@@ -1,9 +1,8 @@
 /**
  * ESLint configuration
- * - https://eslint.org
+ * @see https://eslint.org
  */
 
-const path = require('path')
 const { directory } = require('./config')
 
 module.exports = {
@@ -45,11 +44,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.{ts,tsx}'],
+      files: ['**/*.ts?(x)'],
       extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
       plugins: ['@typescript-eslint'],
       parser: '@typescript-eslint/parser',
     },
   ],
-  ignorePatterns: ['node_modules', directory.dist],
+  ignorePatterns: ['node_modules', '!.*rc.js', directory.dist],
 }

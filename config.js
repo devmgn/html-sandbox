@@ -18,8 +18,10 @@ Object.assign(config.directory, {
   fonts: ConvertPath.toRelativePath(config.directory.fonts),
 })
 
-// svgo options
-// @see https://github.com/svg/svgo#what-it-can-do
+/**
+ * svgo options
+ * @see https://github.com/svg/svgo#what-it-can-do
+ */
 config.svgoOptions = { plugins: [{ removeViewBox: false }] }
 
 module.exports = config

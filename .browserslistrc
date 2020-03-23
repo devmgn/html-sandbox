@@ -1,4 +1,5 @@
-# Browsers that we support
+# Browserslist configuration
+# @see https://github.com/browserslist/browserslist
 
 Explorer >= 11
 Edge >= 18

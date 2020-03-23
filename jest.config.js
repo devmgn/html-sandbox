@@ -1,6 +1,6 @@
 /**
  * Jest Configuration
- * https://jestjs.io
+ * @see https://jestjs.io
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */

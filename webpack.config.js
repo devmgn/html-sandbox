@@ -1,6 +1,6 @@
 /**
  * Webpack configuration
- * https://webpack.js.org
+ * @see https://webpack.js.org
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -127,9 +127,14 @@ module.exports = () => {
     },
     optimization: {
       splitChunks: {
-        chunks: 'initial',
-        minChunks: 2,
-        name: path.join(directory.js, 'vendor'),
+        cacheGroups: {
+          vendor: {
+            chunks: 'initial',
+            minChunks: 2,
+            name: path.join(directory.js, 'vendor'),
+            enforce: true,
+          },
+        },
       },
     },
     plugins: [

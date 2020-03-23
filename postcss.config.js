@@ -1,6 +1,6 @@
 /**
  * Postcss Configuration
- * https://postcss.org
+ * @see https://postcss.org
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
