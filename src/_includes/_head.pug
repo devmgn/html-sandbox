@@ -2,18 +2,18 @@ block variables
 meta(charset="UTF-8")
 meta(name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0")
 meta(http-equiv="X-UA-Compatible" content="IE=edge")
-- if (title)
-  title=title
-- if (description)
-  meta(name="description" content= description)
-- const chunks = htmlWebpackPlugin.files
-- if (styles)
+if (title)
+  title= title
+if (description)
+  meta(name="description" content=description)
+- const chunks = htmlWebpackPlugin.files;
+if (styles)
   each style in styles
-    - const stylePath = chunks.css.find(src => src.includes(style.replace('.css', '')))
-    - if (stylePath)
-      link(rel="stylesheet" href= stylePath)
-- if (scripts)
+    - const stylePath = chunks.css.find((src) => src.includes(style.replace('.css', '')));
+    if (stylePath)
+      link(rel="stylesheet" href=stylePath)
+if (scripts)
   each script in scripts
-    - const scriptPath = chunks.js.find(src => src.includes(script.replace('.js', '')))
-    - if (scriptPath)
-      script(src= scriptPath defer)
+    - const scriptPath = chunks.js.find((src) => src.includes(script.replace('.js', '')));
+    if (scriptPath)
+      script(src=scriptPath defer)

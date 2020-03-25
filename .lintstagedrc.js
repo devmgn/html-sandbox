@@ -3,7 +3,12 @@
  * @see https://github.com/okonet/lint-staged
  */
 
+const path = require('path')
+const { directory, fileExtension } = require('./config')
+const { ExtensionString } = require('./utilities')
+
 module.exports = {
-  '**/*.ts?(x)': ['yarn lint', 'tsc'],
-  '**/*.js?(x)': ['yarn lint'],
+  [`${path.join(directory.src, `**/*.${ExtensionString.toGlobFileTypes(fileExtension.template)}`)}`]: () =>
+    'yarn lint:template',
+  [`**/*.{${ExtensionString.toGlobFileTypes(fileExtension.js)}}`]: () => 'run-s lint:js lint:typescript',
 }
