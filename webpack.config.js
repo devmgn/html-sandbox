@@ -3,8 +3,6 @@
  * @see https://webpack.js.org
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 const glob = require('glob')
 const path = require('path')
 const nodeSassGlobImporter = require('node-sass-glob-importer')
@@ -22,14 +20,14 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
-const { directory, fileExtension, svgoOptions } = require('./config')
+const { directory, fileExtension, svgoOptions, interpolateName } = require('./config')
 const { ExtensionString, ConvertPath } = require('./utilities')
 
 const getMultipleEntry = () => {
   const sassFileTypes = ExtensionString.toGlobFileTypes(fileExtension.sass)
   const jsFileTypes = ExtensionString.toGlobFileTypes(fileExtension.js)
   return glob
-    .sync(`**/*/@([^_]*.{${sassFileTypes}}|?(*.)bundle.{${jsFileTypes}})`, { cwd: directory.src })
+    .sync(`**/@([^_]*.${sassFileTypes}|?(*.)bundle.${jsFileTypes})`, { cwd: directory.src })
     .reduce((entry, src) => {
       const name = path.format({
         dir: path.dirname(src),
@@ -46,7 +44,7 @@ module.exports = () => {
     entry: getMultipleEntry(),
     output: {
       path: path.join(directory.root, directory.dist, directory.publicPath),
-      filename: '[name]-[contenthash:16].js',
+      filename: `${interpolateName}.js`,
       publicPath: directory.publicPath,
     },
     module: {
@@ -90,7 +88,7 @@ module.exports = () => {
               loader: 'pug-loader',
               options: {
                 pretty: true,
-                root: path.join(directory.root, directory.src),
+                root: path.resolve(directory.src),
               },
             },
           ],
@@ -103,9 +101,12 @@ module.exports = () => {
               loader: 'url-loader',
               options: {
                 limit: parseInt(1024 / 4),
-                name: '[name]-[contenthash:16].[ext]',
-                outputPath: (url, resourcePath) =>
-                  path.join(path.dirname(path.relative(directory.src, resourcePath)), url),
+                name: (resourcePath) => {
+                  return `${path.join(
+                    path.dirname(path.relative(directory.src, resourcePath)),
+                    `${interpolateName}.[ext]`
+                  )}`
+                },
               },
             },
             {
@@ -159,12 +160,13 @@ module.exports = () => {
             },
           })
         }),
-      new MiniCssExtractPlugin({ filename: '[name]-[contenthash:16].css' }),
+      new MiniCssExtractPlugin({ filename: `${interpolateName}.css` }),
       new FixStyleOnlyEntriesPlugin({ extensions: ExtensionString.toArray(fileExtension.sass) }),
       new CopyWebpackPlugin([
         {
-          from: path.join(directory.src, `**/*.{${ExtensionString.toGlobFileTypes(fileExtension.resource)}}`),
-          to: path.join(directory.root, directory.dist, directory.publicPath, '[name].[ext]'),
+          from: path.resolve(directory.src, `**/*.${ExtensionString.toGlobFileTypes(fileExtension.resource)}`),
+          to: '[path][name].[ext]',
+          context: directory.src,
         },
       ]),
       new FriendlyErrorsWebpackPlugin(),
@@ -172,6 +174,5 @@ module.exports = () => {
     ],
     devtool: ENV || 'inline-cheap-module-source-map',
     devServer: { openPage: ConvertPath.toRelativePath(directory.publicPath) },
-    stats: 'none',
   }
 }

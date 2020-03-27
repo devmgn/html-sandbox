@@ -10,7 +10,8 @@ const COMMA_AND_SPACE_REGEXP = /[ .]/g
  */
 module.exports.ExtensionString = class {
   static toGlobFileTypes(string) {
-    return string.replace(COMMA_AND_SPACE_REGEXP, '')
+    const fileTypes = string.replace(COMMA_AND_SPACE_REGEXP, '')
+    return string.split(',').length > 1 ? `{${fileTypes}}` : fileTypes
   }
 
   static toArray(strings) {

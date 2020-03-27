@@ -1,6 +1,6 @@
 /**
  * Prettier configuration
- * @see https://prettier.io/
+ * @see https://prettier.io
  */
 
 module.exports = {

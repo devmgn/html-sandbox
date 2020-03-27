@@ -10,5 +10,5 @@ const { ExtensionString } = require('./utilities')
 module.exports = {
   [`${path.join(directory.src, `**/*.${ExtensionString.toGlobFileTypes(fileExtension.template)}`)}`]: () =>
     'yarn lint:template',
-  [`**/*.{${ExtensionString.toGlobFileTypes(fileExtension.js)}}`]: () => 'run-s lint:js lint:typescript',
+  [`**/*.${ExtensionString.toGlobFileTypes(fileExtension.js)}`]: () => 'run-s lint:js lint:typescript',
 }

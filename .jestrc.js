@@ -3,7 +3,6 @@
  * @see https://jestjs.io
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 const { directory } = require('./config')
 

@@ -2,9 +2,8 @@
  * Basic configurations
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
-const { config } = require('./package.json') // import configures from `package.json`
+const { config } = require('./package.json')
 const { ConvertPath } = require('./utilities')
 
 Object.assign(config.directory, {
@@ -23,5 +22,11 @@ Object.assign(config.directory, {
  * @see https://github.com/svg/svgo#what-it-can-do
  */
 config.svgoOptions = { plugins: [{ removeViewBox: false }] }
+
+/**
+ * interpolateName
+ * @see https://github.com/webpack/loader-utils#interpolatename
+ */
+config.interpolateName = '[name]-[contenthash:16]'
 
 module.exports = config
