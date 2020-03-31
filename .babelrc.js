@@ -11,7 +11,7 @@ module.exports = {
         modules: false,
         useBuiltIns: 'usage',
         corejs: 3,
-        debug: false,
+        debug: !process.env.NODE_ENV,
       },
     ],
     '@babel/preset-typescript',
@@ -19,7 +19,14 @@ module.exports = {
   plugins: ['@babel/plugin-proposal-class-properties'],
   env: {
     test: {
-      presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            targets: { node: 'current' },
+          },
+        ],
+      ],
     },
   },
 }

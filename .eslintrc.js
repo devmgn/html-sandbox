@@ -3,7 +3,7 @@
  * @see https://eslint.org
  */
 
-const { directory } = require('./config')
+const { pathname } = require('./config')
 
 module.exports = {
   root: true,
@@ -49,5 +49,5 @@ module.exports = {
       parser: '@typescript-eslint/parser',
     },
   ],
-  ignorePatterns: ['node_modules', '!.*rc.js', directory.dist],
+  ignorePatterns: ['node_modules', '!.*rc.js', pathname.dist],
 }

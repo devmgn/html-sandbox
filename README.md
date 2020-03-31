@@ -28,14 +28,11 @@ Resolved path: `assets/js`
 
 ### pug
 ```pug
-img(src= require(foo.jpg).default)
+img(src= require('assets/images/foo.jpg').default)
 ```
-Resolved path: `assets/images`  
 
 ### sass
 ```sass
 .foo
-  background-image: url(~bar.jpg)
+  background-image: url(~assets/images/foo.jpg)
 ```
-Resolved path: `assets/images`  
-`~` is the alias of the resolved path

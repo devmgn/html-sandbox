@@ -5,6 +5,7 @@
 
 const glob = require('glob')
 const path = require('path')
+const webpack = require('webpack')
 const nodeSassGlobImporter = require('node-sass-glob-importer')
 const imageminJpegtran = require('imagemin-jpegtran')
 const imageminOptipng = require('imagemin-optipng')
@@ -20,22 +21,21 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
-const { directory, fileExtension, svgoOptions, interpolateName } = require('./config')
+const { pathname, extension, svgoOptions, placeholder } = require('./config')
 const { ExtensionString, ConvertPath } = require('./utilities')
 
 const getMultipleEntry = () => {
-  const sassFileTypes = ExtensionString.toGlobFileTypes(fileExtension.sass)
-  const jsFileTypes = ExtensionString.toGlobFileTypes(fileExtension.js)
-  return glob
-    .sync(`**/@([^_]*.${sassFileTypes}|?(*.)bundle.${jsFileTypes})`, { cwd: directory.src })
-    .reduce((entry, src) => {
-      const name = path.format({
-        dir: path.dirname(src),
-        name: path.basename(src, path.extname(src)),
-      })
-      entry[name] = path.resolve(directory.src, src)
-      return entry
-    }, {})
+  return [
+    ...glob.sync(`**/[^_]*.${ExtensionString.toGlobFileTypes(extension.sass)}`, { cwd: pathname.src }),
+    ...glob.sync(`**/?(*.)bundle.${ExtensionString.toGlobFileTypes(extension.javascript)}`, { cwd: pathname.src }),
+  ].reduce((entry, src) => {
+    const name = path.format({
+      dir: path.dirname(src),
+      name: path.basename(src, path.extname(src)),
+    })
+    entry[name] = path.resolve(pathname.src, src)
+    return entry
+  }, {})
 }
 
 module.exports = () => {
@@ -43,69 +43,76 @@ module.exports = () => {
     mode: ENV || 'development',
     entry: getMultipleEntry(),
     output: {
-      path: path.join(directory.root, directory.dist, directory.publicPath),
-      filename: `${interpolateName}.js`,
-      publicPath: directory.publicPath,
+      path: path.join(pathname.root, pathname.dist, pathname.publicPath),
+      filename: `${placeholder}.js`,
+      publicPath: pathname.publicPath,
     },
     module: {
       rules: [
         // JavaScript
         {
-          test: ExtensionString.toFileTypesRegExp(fileExtension.js),
+          test: ExtensionString.toFileTypesRegExp(extension.javascript),
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: { cacheDirectory: true },
+            options: {
+              cacheDirectory: true,
+            },
           },
         },
         // Sass
         {
-          test: ExtensionString.toFileTypesRegExp(fileExtension.sass),
+          test: ExtensionString.toFileTypesRegExp(extension.sass),
           use: [
-            { loader: MiniCssExtractPlugin.loader },
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
             {
               loader: 'css-loader',
-              options: { sourceMap: true },
+              options: {
+                sourceMap: true,
+              },
             },
             {
               loader: 'postcss-loader',
-              options: { sourceMap: true },
+              options: {
+                sourceMap: true,
+              },
             },
             {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
-                sassOptions: { importer: nodeSassGlobImporter() },
+                sassOptions: {
+                  importer: nodeSassGlobImporter(),
+                },
               },
             },
           ],
         },
         // Pug
         {
-          test: ExtensionString.toFileTypesRegExp(fileExtension.template),
+          test: ExtensionString.toFileTypesRegExp(extension.template),
           use: [
             {
               loader: 'pug-loader',
               options: {
                 pretty: true,
-                root: path.resolve(directory.src),
+                root: path.resolve(pathname.src),
               },
             },
           ],
         },
         // Assets
         {
-          test: ExtensionString.toFileTypesRegExp(fileExtension.asset),
+          test: ExtensionString.toFileTypesRegExp(extension.asset),
           use: [
             {
               loader: 'url-loader',
               options: {
                 limit: parseInt(1024 / 4),
                 name: (resourcePath) => {
-                  return `${path.join(
-                    path.dirname(path.relative(directory.src, resourcePath)),
-                    `${interpolateName}.[ext]`
-                  )}`
+                  return `${path.join(path.dirname(path.relative(pathname.src, resourcePath)), `${placeholder}.[ext]`)}`
                 },
               },
             },
@@ -121,10 +128,10 @@ module.exports = () => {
     },
     resolve: {
       alias: {
-        '@': path.join(directory.root, directory.src, directory.js),
+        '@': path.resolve(pathname.src, pathname.javascript),
       },
-      modules: ['node_modules', path.join(directory.src, directory.images), path.join(directory.src, directory.fonts)],
-      extensions: ExtensionString.toArray(fileExtension.js),
+      modules: ['node_modules', pathname.src],
+      extensions: ExtensionString.toArray(extension.javascript),
     },
     optimization: {
       splitChunks: {
@@ -132,7 +139,7 @@ module.exports = () => {
           vendor: {
             chunks: 'initial',
             minChunks: 2,
-            name: path.join(directory.js, 'vendor'),
+            name: path.join(pathname.javascript, 'vendor'),
             enforce: true,
           },
         },
@@ -140,10 +147,12 @@ module.exports = () => {
     },
     plugins: [
       ...glob
-        .sync(`**/[!_]*.${ExtensionString.toGlobFileTypes(fileExtension.template)}`, { cwd: directory.src })
+        .sync(`**/[!_]*.${ExtensionString.toGlobFileTypes(extension.template)}`, {
+          cwd: pathname.src,
+        })
         .map((src) => {
           return new HtmlWebpackPlugin({
-            template: path.join(directory.src, src),
+            template: path.join(pathname.src, src),
             filename: path.format({
               dir: path.dirname(src),
               name: path.basename(src, path.extname(src)),
@@ -160,19 +169,26 @@ module.exports = () => {
             },
           })
         }),
-      new MiniCssExtractPlugin({ filename: `${interpolateName}.css` }),
-      new FixStyleOnlyEntriesPlugin({ extensions: ExtensionString.toArray(fileExtension.sass) }),
+      new MiniCssExtractPlugin({
+        filename: `${placeholder}.css`,
+      }),
+      new FixStyleOnlyEntriesPlugin({
+        extensions: ExtensionString.toArray(extension.sass),
+      }),
       new CopyWebpackPlugin([
         {
-          from: path.resolve(directory.src, `**/*.${ExtensionString.toGlobFileTypes(fileExtension.resource)}`),
+          from: path.resolve(pathname.src, `**/*.${ExtensionString.toGlobFileTypes(extension.resource)}`),
           to: '[path][name].[ext]',
-          context: directory.src,
+          context: pathname.src,
         },
       ]),
-      new FriendlyErrorsWebpackPlugin(),
       new CleanWebpackPlugin(),
+      new FriendlyErrorsWebpackPlugin(),
+      new webpack.optimize.OccurrenceOrderPlugin(),
     ],
     devtool: ENV || 'inline-cheap-module-source-map',
-    devServer: { openPage: ConvertPath.toRelativePath(directory.publicPath) },
+    devServer: {
+      openPage: ConvertPath.toRelativePath(pathname.publicPath),
+    },
   }
 }
