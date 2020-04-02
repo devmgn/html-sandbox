@@ -39,7 +39,6 @@ module.exports.ConvertPath = class {
 
   static toAbsolutePath(targetPath) {
     targetPath = `${path.normalize(targetPath).replace(SEPARATOR_REGEXP, '')}/`
-    console.log(targetPath)
     return path.isAbsolute(targetPath) ? targetPath : path.join(path.sep, targetPath)
   }
 }

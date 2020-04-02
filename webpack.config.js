@@ -5,7 +5,6 @@
 
 const glob = require('glob')
 const path = require('path')
-const webpack = require('webpack')
 const nodeSassGlobImporter = require('node-sass-glob-importer')
 const imageminJpegtran = require('imagemin-jpegtran')
 const imageminOptipng = require('imagemin-optipng')
@@ -22,7 +21,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
 const { pathname, extension, svgoOptions, placeholder } = require('./config')
-const { ExtensionString, ConvertPath } = require('./utilities')
+const { ExtensionString } = require('./utilities')
 
 const getMultipleEntry = () => {
   return [
@@ -43,9 +42,9 @@ module.exports = () => {
     mode: ENV || 'development',
     entry: getMultipleEntry(),
     output: {
-      path: path.join(pathname.root, pathname.dist, pathname.publicPath),
+      path: path.resolve(pathname.dist),
       filename: `${placeholder}.js`,
-      publicPath: pathname.publicPath,
+      publicPath: ENV === 'production' ? pathname.publicPath : '/',
     },
     module: {
       rules: [
@@ -134,6 +133,7 @@ module.exports = () => {
       extensions: ExtensionString.toArray(extension.javascript),
     },
     optimization: {
+      chunkIds: 'total-size',
       splitChunks: {
         cacheGroups: {
           vendor: {
@@ -174,6 +174,7 @@ module.exports = () => {
       }),
       new FixStyleOnlyEntriesPlugin({
         extensions: ExtensionString.toArray(extension.sass),
+        silent: !!ENV,
       }),
       new CopyWebpackPlugin([
         {
@@ -184,11 +185,7 @@ module.exports = () => {
       ]),
       new CleanWebpackPlugin(),
       new FriendlyErrorsWebpackPlugin(),
-      new webpack.optimize.OccurrenceOrderPlugin(),
     ],
     devtool: ENV || 'inline-cheap-module-source-map',
-    devServer: {
-      openPage: ConvertPath.toRelativePath(pathname.publicPath),
-    },
   }
 }

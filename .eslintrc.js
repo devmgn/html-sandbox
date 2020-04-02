@@ -22,12 +22,10 @@ module.exports = {
     },
   },
   rules: {
-    'no-console': 0,
-    'prettier/prettier': [
+    'no-console': [
       'error',
       {
-        singleQuote: true,
-        semi: false,
+        allow: ['error', 'warn'],
       },
     ],
     'no-multi-spaces': [
@@ -38,6 +36,13 @@ module.exports = {
           Property: false,
           VariableDeclarator: true,
         },
+      },
+    ],
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        semi: false,
       },
     ],
   },

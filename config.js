@@ -6,7 +6,6 @@ const { config } = require('./package.json')
 const { ConvertPath } = require('./utilities')
 
 Object.assign(config.pathname, {
-  root: __dirname,
   src: ConvertPath.toRelativePath(config.pathname.src),
   dist: ConvertPath.toRelativePath(config.pathname.dist),
   javascript: ConvertPath.toRelativePath(config.pathname.javascript),
