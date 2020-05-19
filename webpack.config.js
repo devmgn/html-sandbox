@@ -173,16 +173,18 @@ module.exports = () => {
         filename: `${placeholder}.css`,
       }),
       new FixStyleOnlyEntriesPlugin({
-        extensions: ExtensionString.toArray(extension.sass),
         silent: !!ENV,
       }),
-      new CopyWebpackPlugin([
-        {
-          from: path.resolve(pathname.src, `**/*.${ExtensionString.toGlobFileTypes(extension.resource)}`),
-          to: '[path][name].[ext]',
-          context: pathname.src,
-        },
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.resolve(pathname.src, `**/*.${ExtensionString.toGlobFileTypes(extension.resource)}`),
+            to: '[path][name].[ext]',
+            context: pathname.src,
+            noErrorOnMissing: true,
+          },
+        ],
+      }),
       new CleanWebpackPlugin(),
       new FriendlyErrorsWebpackPlugin(),
     ],
