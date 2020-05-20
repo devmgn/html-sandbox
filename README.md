@@ -30,6 +30,10 @@ Resolved path: `assets/js`
 ```pug
 img(src= require('assets/images/foo.jpg').default)
 ```
+Using the inline SVG, require the file name as `*.inline.svg`.
+```pug
+!= require('assets/images/bar.inline.svg').default
+```
 
 ### sass
 ```sass

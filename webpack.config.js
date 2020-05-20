@@ -105,6 +105,7 @@ module.exports = () => {
         // Assets
         {
           test: ExtensionString.toFileTypesRegExp(extension.asset),
+          exclude: /.inline.svg$/,
           use: [
             {
               loader: 'url-loader',
@@ -119,6 +120,21 @@ module.exports = () => {
               loader: 'img-loader',
               options: {
                 plugins: [imageminJpegtran(), imageminGifsicle(), imageminOptipng(), imageminSvgo(svgoOptions)],
+              },
+            },
+          ],
+        },
+        // inline SVG
+        {
+          test: /.inline.svg$/,
+          use: [
+            {
+              loader: 'raw-loader',
+            },
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [imageminSvgo(svgoOptions)],
               },
             },
           ],

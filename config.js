@@ -19,6 +19,8 @@ Object.assign(config.pathname, {
 config.svgoOptions = {
   plugins: [
     {
+      removeAttrs: { attrs: 'data.*' },
+      removeDimensions: true,
       removeViewBox: false,
     },
   ],
