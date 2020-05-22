@@ -20,7 +20,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
-const { pathname, extension, svgoOptions, placeholder } = require('./config')
+const { pathname, extension, svgoOptions, placeholder, inlineSVGRegEXP } = require('./config')
 const { ExtensionString } = require('./utilities')
 
 const getMultipleEntry = () => {
@@ -105,15 +105,14 @@ module.exports = () => {
         // Assets
         {
           test: ExtensionString.toFileTypesRegExp(extension.asset),
-          exclude: /.inline.svg$/,
+          exclude: inlineSVGRegEXP,
           use: [
             {
               loader: 'url-loader',
               options: {
                 limit: parseInt(1024 / 4),
-                name: (resourcePath) => {
-                  return `${path.join(path.dirname(path.relative(pathname.src, resourcePath)), `${placeholder}.[ext]`)}`
-                },
+                name: (resourcePath) =>
+                  `${path.join(path.dirname(path.relative(pathname.src, resourcePath)), `${placeholder}.[ext]`)}`,
               },
             },
             {
@@ -126,7 +125,7 @@ module.exports = () => {
         },
         // inline SVG
         {
-          test: /.inline.svg$/,
+          test: inlineSVGRegEXP,
           use: [
             {
               loader: 'raw-loader',

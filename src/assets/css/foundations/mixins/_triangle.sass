@@ -1,0 +1,23 @@
+// Triangle
+//
+// $angle - string (top, right, bottom, left)
+// $color - color
+// $width - number
+// $height - number
+
+=triangle($angle, $color, $width, $height)
+  $width: strip-unit($width)
+  $height: strip-unit($height)
+  border-style: solid
+  @if $angle == 'top'
+    border-width: 0 #{$width / 2}px #{$height}px
+    border-color: transparent transparent $color
+  @elseif $angle == 'right'
+    border-width: #{$height / 2}px 0 #{$height / 2}px #{$width}px
+    border-color: transparent transparent transparent $color
+  @elseif $angle == 'bottom'
+    border-width: #{$height}px #{$width / 2}px 0
+    border-color: $color transparent transparent
+  @elseif $angle == 'left'
+    border-width: #{$height / 2}px #{$width}px #{$height / 2}px 0
+    border-color: transparent $color transparent transparent
