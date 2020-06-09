@@ -2,13 +2,17 @@
 //
 // $width - string, number or defined breakpoint name
 
+@use "../variables" as *
+@use "../functions/strip-unit" as *
+@use "sass:map"
+@use "sass:meta"
+
 =media-min($width)
-  $width: strip-unit($width)
-  @if type-of($width) == 'number'
-    @media (min-width: #{$width}px)
+  @if meta.type-of($width) == 'number'
+    @media (min-width: #{strip-unit($width)}px)
       @content
   @else
-    @media (min-width: map-get($breakpoints, $width))
+    @media (min-width: map.get($breakpoints, $width))
       @content
 
 // Mediaquery max-width
@@ -16,12 +20,11 @@
 // $width - string, number or defined breakpoint name
 
 =media-max($width)
-  $width: strip-unit($width)
-  @if type-of($width) == 'number'
-    @media (max-width: $width - 1px)
+  @if meta.type-of($_width) == 'number'
+    @media (max-width: strip-unit($width) - 1px)
       @content
   @else
-    @media (max-width: map-get($breakpoints, $width) - 1px)
+    @media (max-width: map.get($breakpoints, $width) - 1px)
       @content
 
 // Mediaquery between width

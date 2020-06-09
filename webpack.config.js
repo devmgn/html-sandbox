@@ -5,6 +5,8 @@
 
 const glob = require('glob')
 const path = require('path')
+const sass = require('sass')
+const fibers = require('fibers')
 const nodeSassGlobImporter = require('node-sass-glob-importer')
 const imageminJpegtran = require('imagemin-jpegtran')
 const imageminOptipng = require('imagemin-optipng')
@@ -82,7 +84,9 @@ module.exports = () => {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
+                implementation: sass,
                 sassOptions: {
+                  fiber: fibers,
                   importer: nodeSassGlobImporter(),
                 },
               },
