@@ -20,7 +20,7 @@
 // $width - string, number or defined breakpoint name
 
 =media-max($width)
-  @if meta.type-of($_width) == 'number'
+  @if meta.type-of($width) == 'number'
     @media (max-width: strip-unit($width) - 1px)
       @content
   @else
