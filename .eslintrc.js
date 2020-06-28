@@ -13,7 +13,7 @@ module.exports = {
     'jest/globals': true,
   },
   extends: ['standard', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
-  plugins: ['prettier', 'jest'],
+  plugins: ['prettier', 'react', 'jest'],
   parserOptions: {
     sourceType: 'module',
     project: 'tsconfig.json',
@@ -38,6 +38,8 @@ module.exports = {
         },
       },
     ],
+    'react/jsx-uses-vars': 1,
+    'react/jsx-uses-react': 1,
     'prettier/prettier': [
       'error',
       {
