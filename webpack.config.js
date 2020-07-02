@@ -27,12 +27,12 @@ const { ExtensionString } = require('./utilities')
 
 const getMultipleEntry = () => {
   return [
-    ...glob.sync(`**/[^_]*.${ExtensionString.toGlobFileTypes(extension.sass)}`, { cwd: pathname.src }),
     ...glob.sync(`**/?(*.)bundle.${ExtensionString.toGlobFileTypes(extension.javascript)}`, { cwd: pathname.src }),
+    ...glob.sync(`**/[^_]*.${ExtensionString.toGlobFileTypes(extension.sass)}`, { cwd: pathname.src }),
   ].reduce((entry, src) => {
     const name = path.format({
       dir: path.dirname(src),
-      name: path.basename(src, path.extname(src)),
+      name: path.parse(src).name,
     })
     entry[name] = path.resolve(pathname.src, src)
     return entry
@@ -72,6 +72,7 @@ module.exports = () => {
               loader: 'css-loader',
               options: {
                 sourceMap: true,
+                importLoaders: 2,
               },
             },
             {
@@ -174,7 +175,7 @@ module.exports = () => {
             template: path.join(pathname.src, src),
             filename: path.format({
               dir: path.dirname(src),
-              name: path.basename(src, path.extname(src)),
+              name: path.parse(src).name,
               ext: '.html',
             }),
             inject: false,
@@ -207,6 +208,6 @@ module.exports = () => {
       new CleanWebpackPlugin(),
       new FriendlyErrorsWebpackPlugin(),
     ],
-    devtool: ENV || 'inline-cheap-module-source-map',
+    devtool: ENV || 'source-map',
   }
 }

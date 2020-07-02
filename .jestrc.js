@@ -20,5 +20,5 @@ module.exports = {
       tsConfig: 'tsconfig.json',
     },
   },
-  testMatch: [path.join('<rootDir>', 'test/**/?(*.)(spec|test).[jt]s?(x)')],
+  testMatch: [path.join('<rootDir>', 'test/**/*.(spec|test).[jt]s?(x)')],
 }

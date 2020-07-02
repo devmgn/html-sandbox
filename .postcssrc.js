@@ -4,14 +4,16 @@
  */
 
 const autoprefixer = require('autoprefixer')
-const flexbugsFixes = require('postcss-flexbugs-fixes')
+const postcssSortMediaQueries = require('postcss-sort-media-queries')
+const postcssFlexbugsFixes = require('postcss-flexbugs-fixes')
 const cssnano = require('cssnano')
 
 const { svgoOptions } = require('./config')
 
 module.exports = {
   plugins: [
-    flexbugsFixes(),
+    postcssSortMediaQueries(),
+    postcssFlexbugsFixes(),
     autoprefixer(),
     cssnano({
       preset: [
