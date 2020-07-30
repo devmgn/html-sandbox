@@ -11,6 +11,7 @@ const nodeSassGlobImporter = require('node-sass-glob-importer')
 const imageminJpegtran = require('imagemin-jpegtran')
 const imageminOptipng = require('imagemin-optipng')
 const imageminGifsicle = require('imagemin-gifsicle')
+const imageminWebp = require('imagemin-webp')
 const imageminSvgo = require('imagemin-svgo')
 
 // webpack plugins
@@ -28,7 +29,7 @@ const { ExtensionString } = require('./utilities')
 const getMultipleEntry = () => {
   return [
     ...glob.sync(`**/?(*.)bundle.${ExtensionString.toGlobFileTypes(extension.javascript)}`, { cwd: pathname.src }),
-    ...glob.sync(`**/[^_]*.${ExtensionString.toGlobFileTypes(extension.sass)}`, { cwd: pathname.src }),
+    ...glob.sync(`**/[^_]*.{sass,scss}`, { cwd: pathname.src }),
   ].reduce((entry, src) => {
     const name = path.format({
       dir: path.dirname(src),
@@ -37,6 +38,15 @@ const getMultipleEntry = () => {
     entry[name] = path.resolve(pathname.src, src)
     return entry
   }, {})
+}
+
+const ulrLoaderOptions = {
+  loader: 'url-loader',
+  options: {
+    limit: parseInt(1024 / 4),
+    name: (resourcePath) =>
+      `${path.join(path.dirname(path.relative(pathname.src, resourcePath)), `${placeholder}.[ext]`)}`,
+  },
 }
 
 module.exports = () => {
@@ -63,7 +73,7 @@ module.exports = () => {
         },
         // Sass
         {
-          test: ExtensionString.toFileTypesRegExp(extension.sass),
+          test: /.s(a|c)ss$/i,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
@@ -96,7 +106,7 @@ module.exports = () => {
         },
         // Pug
         {
-          test: ExtensionString.toFileTypesRegExp(extension.template),
+          test: /.pug$/i,
           use: [
             {
               loader: 'pug-loader',
@@ -111,19 +121,70 @@ module.exports = () => {
         {
           test: ExtensionString.toFileTypesRegExp(extension.asset),
           exclude: inlineSVGRegEXP,
+          use: [ulrLoaderOptions],
+        },
+        // .jpg
+        {
+          test: /.jpe?g$/i,
           use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: parseInt(1024 / 4),
-                name: (resourcePath) =>
-                  `${path.join(path.dirname(path.relative(pathname.src, resourcePath)), `${placeholder}.[ext]`)}`,
-              },
-            },
+            ulrLoaderOptions,
             {
               loader: 'img-loader',
               options: {
-                plugins: [imageminJpegtran(), imageminGifsicle(), imageminOptipng(), imageminSvgo(svgoOptions)],
+                plugins: [imageminJpegtran()],
+              },
+            },
+          ],
+        },
+        // .png
+        {
+          test: /.png$/i,
+          use: [
+            ulrLoaderOptions,
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [imageminOptipng()],
+              },
+            },
+          ],
+        },
+        // .gif
+        {
+          test: /.gif$/i,
+          use: [
+            ulrLoaderOptions,
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [imageminGifsicle()],
+              },
+            },
+          ],
+        },
+        // .webp
+        {
+          test: /.webp$/i,
+          use: [
+            ulrLoaderOptions,
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [imageminWebp()],
+              },
+            },
+          ],
+        },
+        // .svg
+        {
+          test: /.svg$/i,
+          exclude: inlineSVGRegEXP,
+          use: [
+            ulrLoaderOptions,
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [imageminSvgo(svgoOptions)],
               },
             },
           ],
@@ -167,7 +228,7 @@ module.exports = () => {
     },
     plugins: [
       ...glob
-        .sync(`**/[!_]*.${ExtensionString.toGlobFileTypes(extension.template)}`, {
+        .sync('**/[!_]*.pug', {
           cwd: pathname.src,
         })
         .map((src) => {
