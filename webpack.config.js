@@ -73,7 +73,7 @@ module.exports = () => {
         },
         // Sass
         {
-          test: /.s(a|c)ss$/i,
+          test: /.s[ac]ss$/i,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
@@ -269,6 +269,6 @@ module.exports = () => {
       new CleanWebpackPlugin(),
       new FriendlyErrorsWebpackPlugin(),
     ],
-    devtool: ENV || 'source-map',
+    devtool: ENV || 'cheap-module-source-map',
   }
 }
