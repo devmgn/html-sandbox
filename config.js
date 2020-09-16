@@ -33,5 +33,6 @@ config.svgoOptions = {
 config.placeholder = '[name]-[contenthash:16]'
 
 config.inlineSVGRegEXP = /.inline.svg$/i
+config.SVGSpriteRegEXP = /.sprite.svg$/i
 
 module.exports = config

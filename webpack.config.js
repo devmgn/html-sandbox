@@ -23,7 +23,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
-const { pathname, extension, svgoOptions, placeholder, inlineSVGRegEXP } = require('./config')
+const { pathname, extension, svgoOptions, placeholder, inlineSVGRegEXP, SVGSpriteRegEXP } = require('./config')
 const { ExtensionString } = require('./utilities')
 
 const getMultipleEntry = () => {
@@ -178,7 +178,7 @@ module.exports = () => {
         // .svg
         {
           test: /.svg$/i,
-          exclude: inlineSVGRegEXP,
+          exclude: [inlineSVGRegEXP, SVGSpriteRegEXP],
           use: [
             ulrLoaderOptions,
             {
@@ -195,6 +195,24 @@ module.exports = () => {
           use: [
             {
               loader: 'raw-loader',
+            },
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [imageminSvgo(svgoOptions)],
+              },
+            },
+          ],
+        },
+        // SVG sprite
+        {
+          test: SVGSpriteRegEXP,
+          use: [
+            {
+              loader: 'svg-sprite-loader',
+              options: {
+                symbolId: (filePath) => path.basename(filePath, '.svg').replace(/\.sprite$/i, ''),
+              },
             },
             {
               loader: 'img-loader',

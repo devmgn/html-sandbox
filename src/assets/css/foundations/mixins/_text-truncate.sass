@@ -1,0 +1,15 @@
+
+//
+// Text truncate
+//
+
+=text-truncate($lines: null)
+  @if ($lines == null)
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+  @else
+    display: -webkit-box
+    -webkit-box-orient: vertical
+    -webkit-line-clamp: $lines
+    overflow: hidden

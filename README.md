@@ -40,3 +40,20 @@ Using the inline SVG, require the file name as `*.inline.svg`.
 .foo
   background-image: url(~assets/images/foo.jpg)
 ```
+
+### inline SVG
+set file name to `foo.inline.svg`
+```pug
+!= require('path/to/file.inline.svg').default
+```
+
+### SVG Sprite
+set file name to `foo.sprite.svg`
+```typescript
+import 'path/to/file.sprite.svg'
+```
+
+```pug
+svg
+  use(xlink:href="#fileId")
+```
