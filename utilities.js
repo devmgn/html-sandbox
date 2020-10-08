@@ -15,16 +15,12 @@ module.exports.ExtensionString = class {
     return string.split(',').length > 1 ? `{${fileTypes}}` : fileTypes
   }
 
-  static toArray(string) {
-    return string.split(',').map((extension) => `.${extension.replace(SPACE_AND_COMMA_REGEXP, '')}`)
-  }
-
   static toFileTypesRegExp(string) {
     const pattern = string
       .split(',')
       .map((extension) => extension.replace(SPACE_AND_COMMA_REGEXP, ''))
       .join('|')
-    return new RegExp(`.(${pattern})$`, 'i')
+    return new RegExp(`\\.(${pattern})$`, 'i')
   }
 }
 

@@ -23,37 +23,34 @@ The following default values can be changed by editing `config.directory` in `pa
 ```typescript
 import foo as bar from '@/baz'
 ```
-Resolved path: `assets/js`  
-`@` is the alias of the resolved path
+Default resolved path: `assets/js`  
+*`@` is the alias of the resolved path
 
-### pug
+### Images
+#### pug
+#### Normal image
 ```pug
-img(src= require('assets/images/foo.jpg').default)
-```
-Using the inline SVG, require the file name as `*.inline.svg`.
-```pug
-!= require('assets/images/bar.inline.svg').default
+img(src= require('assets/images/foo.jpg'))
 ```
 
-### sass
+##### inline SVG
+```pug
+!= require('path/to/file.svg?inline')
+```
+
+##### SVG Sprite
+Import the target svg file into your script.
+```typescript
+import 'path/to/file.svg?sprite'
+```
+The id for xlink:href is file name without extension.
+```pug
+svg
+  use(xlink:href="#file")
+```
+
+#### SASS or SCSS
 ```sass
 .foo
   background-image: url(~assets/images/foo.jpg)
-```
-
-### inline SVG
-set file name to `foo.inline.svg`
-```pug
-!= require('path/to/file.inline.svg').default
-```
-
-### SVG Sprite
-set file name to `foo.sprite.svg`
-```typescript
-import 'path/to/file.sprite.svg'
-```
-
-```pug
-svg
-  use(xlink:href="#fileId")
 ```

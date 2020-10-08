@@ -5,34 +5,35 @@
 const { config } = require('./package.json')
 const { ConvertPath } = require('./utilities')
 
-Object.assign(config.pathname, {
-  src: ConvertPath.toRelativePath(config.pathname.src),
-  dist: ConvertPath.toRelativePath(config.pathname.dist),
-  javascript: ConvertPath.toRelativePath(config.pathname.javascript),
-  publicPath: ConvertPath.toAbsolutePath(config.pathname.publicPath),
-})
+module.exports = {
+  directory: {
+    src: ConvertPath.toRelativePath(config.directory.src),
+    dist: ConvertPath.toRelativePath(config.directory.dist),
+    javascript: ConvertPath.toRelativePath(config.directory.javascript),
+    publicPath: ConvertPath.toAbsolutePath(config.directory.publicPath),
+  },
 
-/**
- * svgo options
- * @see https://github.com/svg/svgo#what-it-can-do
- */
-config.svgoOptions = {
-  plugins: [
-    {
-      removeAttrs: { attrs: 'data.*' },
-      removeDimensions: true,
-      removeViewBox: false,
-    },
-  ],
+  extension: config.extension,
+
+  /**
+   * svgo options
+   * @see https://github.com/svg/svgo#what-it-can-do
+   */
+  svgoOptions: {
+    plugins: [
+      {
+        removeAttrs: { attrs: 'data.*' },
+        removeDimensions: true,
+        removeViewBox: false,
+      },
+    ],
+  },
+
+  /**
+   * placeholder
+   * @see https://webpack.js.org/configuration/output/#outputfilename
+   */
+  placeholder: '[name]-[hash]',
+
+  javascriptGlobPattern: '[jt]s?(x)',
 }
-
-/**
- * placeholder
- * @see https://webpack.js.org/configuration/output/#outputfilename
- */
-config.placeholder = '[name]-[contenthash:16]'
-
-config.inlineSVGRegEXP = /.inline.svg$/i
-config.SVGSpriteRegEXP = /.sprite.svg$/i
-
-module.exports = config

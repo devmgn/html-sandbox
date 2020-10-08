@@ -4,10 +4,9 @@
  */
 
 const path = require('path')
-const { pathname, extension } = require('./config')
-const { ExtensionString } = require('./utilities')
+const { directory, javascriptGlobPattern } = require('./config')
 
 module.exports = {
-  [`${path.join(pathname.src, '**/*.pug')}`]: () => 'yarn lint:template',
-  [`**/*.${ExtensionString.toGlobFileTypes(extension.javascript)}`]: () => 'run-s lint:javascript lint:typescript',
+  [`${path.join(directory.src, '**/*.pug')}`]: () => 'yarn lint:template',
+  [`**/*.${javascriptGlobPattern}`]: () => 'run-s lint:javascript lint:typescript',
 }
