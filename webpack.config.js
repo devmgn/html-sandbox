@@ -3,6 +3,10 @@
  * @see https://webpack.js.org
  */
 
+/** @typedef { import('webpack').Configuration } WebpackConfiguration */
+/** @typedef { import('webpack').RuleSetRule } WebpackRuleSetRule */
+/** @typedef { { [key: string]: string } } MultipleEntry */
+
 const glob = require('glob')
 const path = require('path')
 const sass = require('sass')
@@ -17,6 +21,8 @@ const imageminSvgo = require('imagemin-svgo')
 // webpack plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// @ts-ignore
+// TODO: fix types
 const WebpackFixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
@@ -26,10 +32,15 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { directory, extension, javascriptGlobPattern, svgoOptions, placeholder } = require('./config')
 const { ExtensionString } = require('./utilities')
 
+/** @returns { WebpackConfiguration } */
 module.exports = () => {
+  /** @type { boolean } */
   const isProductionBuild = process.env.NODE_ENV === 'production'
 
+  /** @returns { MultipleEntry } */
   const getMultipleEntry = () => {
+    /** @type { MultipleEntry } */
+    const initialEntry = {}
     return glob
       .sync(`**/@(?(*.)bundle.${javascriptGlobPattern}|[^_]*.s[ac]ss)`, { cwd: directory.src })
       .reduce((entry, src) => {
@@ -39,9 +50,10 @@ module.exports = () => {
         })
         entry[name] = path.resolve(directory.src, src)
         return entry
-      }, {})
+      }, initialEntry)
   }
 
+  /** @returns { WebpackRuleSetRule } */
   const getAssetModuleOption = () => {
     return {
       type: 'asset',
@@ -60,8 +72,11 @@ module.exports = () => {
       path: path.resolve(directory.dist),
       filename: `${placeholder}.js`,
       publicPath: isProductionBuild ? directory.publicPath : '/',
-      assetModuleFilename: (pathData) =>
-        path.join(path.relative(directory.src, pathData.module.context), `${placeholder}[ext]`),
+      assetModuleFilename: (pathData) => {
+        return pathData.filename
+          ? path.join(path.relative(directory.src, path.dirname(pathData.filename)), `${placeholder}[ext]`)
+          : ''
+      },
     },
     module: {
       rules: [
@@ -122,7 +137,7 @@ module.exports = () => {
         },
         // Assets
         {
-          test: ExtensionString.toFileTypesRegExp(extension.asset),
+          test: ExtensionString.toRegExp(extension.asset),
           type: 'asset/resource',
         },
         // Raster Images
@@ -201,6 +216,8 @@ module.exports = () => {
       },
     },
     plugins: [
+      // TODO: fix webpack5 deprecation warning
+      // @see https://github.com/jantimon/html-webpack-plugin/issues/1527
       ...glob
         .sync('**/[!_]*.pug', {
           cwd: directory.src,
@@ -235,7 +252,7 @@ module.exports = () => {
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: path.resolve(directory.src, `**/*.${ExtensionString.toGlobFileTypes(extension.resource)}`),
+            from: path.resolve(directory.src, `**/*.${ExtensionString.toGlobPattern(extension.resource)}`),
             to: '[path][name].[ext]',
             context: directory.src,
             noErrorOnMissing: true,

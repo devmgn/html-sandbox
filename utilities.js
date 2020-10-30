@@ -7,15 +7,23 @@ const SPACE_AND_COMMA_REGEXP = /[ .]/g
 const SEPARATOR_REGEXP = new RegExp(`${path.sep}$`)
 
 /**
- * Format extension string defined in `package.json`
+ * Format the extension string defined in `package.json`
  */
 module.exports.ExtensionString = class {
-  static toGlobFileTypes(string) {
+  /**
+   * @param { string } string
+   * @returns { string }
+   */
+  static toGlobPattern(string) {
     const fileTypes = string.replace(SPACE_AND_COMMA_REGEXP, '')
     return string.split(',').length > 1 ? `{${fileTypes}}` : fileTypes
   }
 
-  static toFileTypesRegExp(string) {
+  /**
+   * @param { string } string
+   * @returns { RegExp }
+   */
+  static toRegExp(string) {
     const pattern = string
       .split(',')
       .map((extension) => extension.replace(SPACE_AND_COMMA_REGEXP, ''))
@@ -28,12 +36,20 @@ module.exports.ExtensionString = class {
  * Convert path to absolute or relative path
  */
 module.exports.ConvertPath = class {
-  static toRelativePath(targetPath) {
+  /**
+   * @param { string } targetPath
+   * @returns { string }
+   */
+  static toRelative(targetPath) {
     targetPath = path.normalize(targetPath)
     return path.isAbsolute(targetPath) ? targetPath.replace(path.parse(targetPath).root, '') : targetPath
   }
 
-  static toAbsolutePath(targetPath) {
+  /**
+   * @param { string } targetPath
+   * @returns { string }
+   */
+  static toAbsolute(targetPath) {
     targetPath = `${path.normalize(targetPath).replace(SEPARATOR_REGEXP, '')}/`
     return path.isAbsolute(targetPath) ? targetPath : path.join(path.sep, targetPath)
   }

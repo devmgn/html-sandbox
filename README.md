@@ -8,7 +8,7 @@
 
 ### Development
 ```shell
-$ yarn dev
+$ yarn start
 ```
 
 ### Production build
