@@ -10,10 +10,8 @@
       "javascript": "assets/js",
       "publicPath": "/path/to/public/"
     },
-    "extension": {
-      "asset": ".ico, .mp4, .webm, .woff, .woff2",
-      "resource": ".txt, .pdf"
-    }
+    "resolvedTarget": "\\.(ico|mp4|webm|woff2?)$",
+    "copyTarget": "**/*.{txt,pdf}"
   },
   "scripts": {
     "preinstall": "npx only-allow yarn",
@@ -81,7 +79,7 @@
     "friendly-errors-webpack-plugin": "1.7.0",
     "glob": "7.1.6",
     "html-webpack-plugin": "4.5.0",
-    "husky": "4.3.4",
+    "husky": "4.3.5",
     "imagemin": "7.0.1",
     "imagemin-gifsicle": "7.0.0",
     "imagemin-jpegtran": "7.0.0",

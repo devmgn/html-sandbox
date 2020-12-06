@@ -28,9 +28,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-// configurations and utilities
-const { directory, extension, javascriptGlobPattern, svgoOptions, placeholder } = require('./config')
-const { ExtensionString } = require('./utilities')
+// configurations
+const { directory, javascriptGlobPattern, svgoOptions, placeholder, resolvedTarget, copyTarget } = require('./config')
 
 /** @returns { WebpackConfiguration } */
 module.exports = () => {
@@ -137,7 +136,7 @@ module.exports = () => {
         },
         // Assets
         {
-          test: ExtensionString.toRegExp(extension.asset),
+          test: resolvedTarget,
           type: 'asset/resource',
         },
         // Raster Images
@@ -252,7 +251,7 @@ module.exports = () => {
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: path.resolve(directory.src, `**/*.${ExtensionString.toGlobPattern(extension.resource)}`),
+            from: copyTarget,
             to: '[path][name].[ext]',
             context: directory.src,
             noErrorOnMissing: true,

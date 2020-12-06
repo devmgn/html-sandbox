@@ -3,7 +3,6 @@
  */
 
 /** @typedef { { src: string; dist: string; javascript: string; publicPath: string; } } Directory */
-/** @typedef { { asset: string; resource: string } } Extension */
 /** @typedef { import('svgo').Options } SVGOOptions */
 
 const { config } = require('./package.json')
@@ -18,8 +17,11 @@ module.exports = {
     publicPath: ConvertPath.toAbsolute(config.directory.publicPath),
   },
 
-  /** @type { Extension } */
-  extension: config.extension,
+  /** @type { RegExp } */
+  resolvedTarget: new RegExp(config.resolvedTarget, 'i'),
+
+  /** @type { string } */
+  copyTarget: config.copyTarget,
 
   /**
    * svgo options
