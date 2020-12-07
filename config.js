@@ -40,11 +40,9 @@ module.exports = {
 
   /**
    * placeholder
-   * // TODO: fix webpack5 deprecation warning
-   * @see https://webpack.js.org/configuration/output/#outputfilename
    * @type { string }
    */
-  placeholder: '[name]-[hash]',
+  placeholder: '[name]-[contenthash]',
 
   /** @type { string } */
   javascriptGlobPattern: '[jt]s?(x)',

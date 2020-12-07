@@ -23,7 +23,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // @ts-ignore
 // TODO: fix types
-const WebpackFixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
+const WebpackRemoveEmptyScripts = require('webpack-remove-empty-scripts')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -244,9 +244,9 @@ module.exports = () => {
       new MiniCssExtractPlugin({
         filename: `${placeholder}.css`,
       }),
-      // TODO: fix webpack5 deprecation warning
+      // Use the 'webpack-remove-empty-scripts' plugin in the interim until 'webpack-fix-style-only-entries' is fixed
       // @see https://github.com/fqborges/webpack-fix-style-only-entries/issues/31
-      new WebpackFixStyleOnlyEntriesPlugin({
+      new WebpackRemoveEmptyScripts({
         silent: !isProductionBuild,
       }),
       new CopyWebpackPlugin({
