@@ -5,7 +5,7 @@
 
 /** @typedef { import('webpack').Configuration } WebpackConfiguration */
 /** @typedef { import('webpack').RuleSetRule } WebpackRuleSetRule */
-/** @typedef { { [key: string]: string } } MultipleEntry */
+/** @typedef { import('svg-sprite-loader') } SVGLoaderOptions */
 
 const glob = require('glob')
 const path = require('path')
@@ -33,12 +33,10 @@ const { directory, javascriptGlobPattern, svgoOptions, placeholder, resolvedTarg
 
 /** @returns { WebpackConfiguration } */
 module.exports = () => {
-  /** @type { boolean } */
   const isProductionBuild = process.env.NODE_ENV === 'production'
 
-  /** @returns { MultipleEntry } */
   const getMultipleEntry = () => {
-    /** @type { MultipleEntry } */
+    /** @type { { [key: string]: string } } */
     const initialEntry = {}
     return glob
       .sync(`**/@(?(*.)bundle.${javascriptGlobPattern}|[^_]*.s[ac]ss)`, { cwd: directory.src })
@@ -52,16 +50,22 @@ module.exports = () => {
       }, initialEntry)
   }
 
-  /** @returns { WebpackRuleSetRule } */
-  const getAssetModuleOption = () => {
-    return {
-      type: 'asset',
-      parser: {
-        dataUrlCondition: {
-          maxSize: 1024 / 4,
-        },
+  /** @type { WebpackRuleSetRule } */
+  const assetModuleOptions = {
+    type: 'asset',
+    parser: {
+      dataUrlCondition: {
+        maxSize: 1024 / 4,
       },
-    }
+    },
+  }
+
+  /** @type { WebpackRuleSetRule } */
+  const imageminSvgOptions = {
+    loader: 'img-loader',
+    options: {
+      plugins: [imageminSvgo(svgoOptions)],
+    },
   }
 
   return {
@@ -144,7 +148,7 @@ module.exports = () => {
           const plugins = [imageminJpegtran(), imageminOptipng(), imageminGifsicle(), imageminWebp()]
           return {
             test: pattern,
-            ...getAssetModuleOption(),
+            ...assetModuleOptions,
             use: [
               {
                 loader: 'img-loader',
@@ -158,37 +162,34 @@ module.exports = () => {
         // svg
         {
           test: /\.svg$/i,
-          use: [
-            {
-              loader: 'img-loader',
-              options: {
-                plugins: [imageminSvgo(svgoOptions)],
-              },
-            },
-          ],
           oneOf: [
             // inline svg
             {
               resourceQuery: /inline/,
               type: 'asset/source',
+              use: [imageminSvgOptions],
             },
-            // TODO: fix webpack5 problems
-            // @see https://github.com/JetBrains/svg-sprite-loader/issues/413
             // sprite svg
-            // {
-            //   resourceQuery: /sprite/,
-            //   use: [
-            //     {
-            //       loader: 'svg-sprite-loader',
-            //       options: {
-            //         symbolId: (filePath) => path.basename(filePath, '.svg'),
-            //       },
-            //     },
-            //   ],
-            // },
+            {
+              resourceQuery: /sprite/,
+              use: [
+                {
+                  loader: 'svg-sprite-loader',
+                  options: {
+                    /** @type { SVGLoaderOptions } */
+                    symbolId: (filePath) => {
+                      if (typeof filePath !== 'string') return
+                      return path.basename(filePath, '.svg')
+                    },
+                  },
+                },
+                imageminSvgOptions,
+              ],
+            },
             // default
             {
-              ...getAssetModuleOption(),
+              ...assetModuleOptions,
+              use: [imageminSvgOptions],
             },
           ],
         },
