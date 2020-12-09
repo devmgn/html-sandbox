@@ -247,7 +247,7 @@ module.exports = () => {
       // Use the 'webpack-remove-empty-scripts' plugin in the interim until 'webpack-fix-style-only-entries' is fixed
       // @see https://github.com/fqborges/webpack-fix-style-only-entries/issues/31
       new WebpackRemoveEmptyScripts({
-        silent: !isProductionBuild,
+        verbose: !isProductionBuild,
       }),
       new CopyWebpackPlugin({
         patterns: [
@@ -272,5 +272,6 @@ module.exports = () => {
     devServer: {
       open: true,
     },
+    target: isProductionBuild ? 'browserslist' : 'web',
   }
 }
