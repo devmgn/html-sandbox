@@ -5,7 +5,7 @@
 @use "variables" as *
 
 // =============================================================================
-// Global
+// Main root
 // =============================================================================
 
 *,
@@ -19,10 +19,6 @@
   text-decoration: inherit
   vertical-align: inherit
 
-// =============================================================================
-// Document
-// =============================================================================
-
 // 1. Remove the grey highlight on links in iOS
 // 2. Improving font rendering in macOS
 // 3. Prevent adjustments of font size after orientation changes in iOS
@@ -35,12 +31,19 @@ html
   -webkit-text-size-adjust: 100% // 3
 
 // =============================================================================
-// Sections
+// Sectioning root
 // =============================================================================
 
 body
   margin: 0
   min-width: 320px
+
+// =============================================================================
+// Sectioning root
+// =============================================================================
+
+address
+  font-style: normal
 
 h1,
 h2,
@@ -53,27 +56,16 @@ h6
   font-weight: normal
   font-size: 100%
 
-// address
-//   font-style: normal
-
-// =============================================================================
-// Grouping content
-// =============================================================================
-
 // Add the correct display in IE.
 main
   display: block
 
-p
-  margin-top: 0
-  margin-bottom: 0
+// =============================================================================
+// Text content
+// =============================================================================
 
-ol,
-ul
-  list-style-type: none
-  margin-top: 0
-  margin-bottom: 0
-  padding-left: 0
+blockquote
+  margin: 0
 
 dl
   margin-top: 0
@@ -82,152 +74,225 @@ dl
 dd
   margin-left: 0
 
-// figure
-//   margin: 0
+figure
+  margin: 0
 
-// hr
-//   margin: 0
-//   border-style: none
+hr
+  margin: 0
+  border-style: none
 
-// pre
-//   margin-top: 0
-//   margin-bottom: 0
+ol,
+ul
+  list-style-type: none
+  margin-top: 0
+  margin-bottom: 0
+  padding-left: 0
 
-// blockquote
-//   margin: 0
+p
+  margin-top: 0
+  margin-bottom: 0
+
+pre
+  margin-top: 0
+  margin-bottom: 0
 
 // =============================================================================
-// Text-level semantics
+// Inline text semantics
 // =============================================================================
 
-// small
-//   font-size: 100%
+abbr[title]
+  text-decoration: none
 
-// b,
-// strong
-//   font-weight: normal
+b,
+strong
+  font-weight: normal
 
-// i,
-// cite,
-// em,
-// var,
-// dfn
-//   font-style: normal
+cite,
+dfn,
+em,
+i,
+var
+  font-style: normal
 
-// sup,
-// sub
-//   font-size: 75%
-//   line-height: 0
+code,
+kbd,
+samp
+  font-family: $font-family-monospace
 
-// q
-//   &::before,
-//   &::after
-//     content: none
+mark
+  background-color: transparent
+  color: inherit
 
-// mark
-//   background-color: transparent
-//   color: inherit
+q
+  &::before,
+  &::after
+    content: none
 
-// abbr[title]
-//   text-decoration: none
+small
+  font-size: 100%
 
-// code,
-// kbd,
-// samp
-//   font-family: $font-family-monospace
+sub,
+sup
+  font-size: 100%
+  vertical-align: inherit
+
+// =============================================================================
+// Image and multimedia
+// =============================================================================
+
+audio,
+img,
+video
+  vertical-align: middle
 
 // =============================================================================
 // Embedded content
 // =============================================================================
 
-// audio,
-// canvas,
-// iframe,
-// svg,
-// video
-img
+iframe
+  border-style: none
   vertical-align: middle
 
-// Change the fill color to match the text color in all browsers
-// svg:not([fill])
-//   fill: currentColor
-
-// Hide the overflow in IE.
-// svg:not(:root)
-//   overflow: hidden
-
-// iframe
-//   border-style: none
-
 // =============================================================================
-// Tabular data
+// SVG and MathML
 // =============================================================================
 
-// table
-//   border-collapse: collapse
-//   border-spacing: 0
+// 1. Change the fill color to match the text color in all browsers
+// 2. Hide the overflow in IE.
+svg
+  vertical-align: middle
+  &:not([fill])
+    fill: currentColor // 1
+  &:not(:root)
+    overflow: hidden // 2
 
-// caption
-//   text-align: inherit
+// =============================================================================
+// Scripting
+// =============================================================================
 
-// thead,
-// tbody,
-// tfoot
-//   vertical-align: inherit
+canvas
+  display: inline-block
 
-// td,
-// th
-//   padding: 0
+// =============================================================================
+// Table content
+// =============================================================================
 
-// th
-//   font-weight: inherit
-//   text-align: left
+caption
+  text-align: inherit
+
+table
+  table-layout: fixed
+  border-collapse: collapse
+  border-spacing: 0
+
+tbody,
+tfoot,
+thead
+  vertical-align: inherit
+
+td,
+th
+  padding: 0
+
+th
+  font-weight: inherit
+  text-align: left
 
 // =============================================================================
 // Forms
 // =============================================================================
 
-// fieldset
-//   margin-right: 0
-//   margin-left: 0
-//   padding: 0
-//   min-width: 0
-//   border-style: none
+button,
+input,
+select,
+textarea
+  margin: 0
+  padding: 0
+  border-style: none
+  background-color: transparent
+  color: inherit
+  font: inherit
 
-// legend
-//   padding-right: 0
-//   padding-left: 0
+// 1. Show the overflow in IE.
+// 2. Remove the inheritance of text transform in Edge 18-, Firefox, and IE.
+button
+  overflow: visible // 1
+  text-transform: none // 2
+  &:not(:disabled)
+    cursor: pointer
 
-// input,
-// textarea,
-// select,
-// button
-//   margin: 0
-//   padding: 0
-//   border-style: none
-//   border-radius: 0
-//   background-color: transparent
-//   color: inherit
-//   font: inherit
-//   &::placeholder
-//     color: inherit
-//   &::-moz-placeholder
-//     opacity: 1
+input,
+textarea
+  border-radius: 0
+  &:disabled
+    opacity: 1
+  &::placeholder
+    color: inherit
+    opacity: 1
 
-// textarea
-//   overflow: auto
-//   resize: vertical
+// 1. Remove the inheritance of text transform in Firefox.
+select
+  border-radius: 0
+  text-transform: none // 1
+  appearance: none
+  &:disabled
+    opacity: 1
+  &::-ms-expand
+    display: none
+  &::-ms-value
+    color: inherit
+
+// Remove the default vertical scrollbar in IE
+textarea
+  overflow: auto
+
+fieldset
+  margin-right: 0
+  margin-left: 0
+  padding: 0
+  min-width: 0
+  border-style: none
+
+legend
+  padding-right: 0
+  padding-left: 0
+
+// =============================================================================
+// Interactive elements
+// =============================================================================
+
+details
+  display: block
+
+dialog
+  display: block
+  background-color: transparent
+  border-style: none
+  margin: 0
+  padding: 0
+  &:not([open])
+    display: none
+
+summary
+  display: list-item
+
+// =============================================================================
+// Interactive elements
+// =============================================================================
+
+template
+  display: none
 
 // =============================================================================
 // User interaction
 // =============================================================================
 
 // Remove the tapping delay on clickable elements
-// a,
-// button,
-// input,
-// label,
-// select,
-// textarea,
-// [tabindex]
-//   touch-action: manipulation
+a,
+button,
+input,
+label,
+select,
+textarea,
+[tabindex]
+  touch-action: manipulation
