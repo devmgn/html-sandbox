@@ -3,7 +3,7 @@
  * @see https://eslint.org
  */
 
-const { directory } = require('./config')
+const { directory } = require('./config');
 
 module.exports = {
   root: true,
@@ -12,13 +12,20 @@ module.exports = {
     browser: true,
     'jest/globals': true,
   },
-  extends: ['standard', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
+  extends: ['airbnb', 'airbnb/hooks', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
   plugins: ['prettier', 'react', 'jest'],
   parserOptions: {
     sourceType: 'module',
     project: 'tsconfig.json',
     ecmaFeatures: {
       jsx: true,
+    },
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {
+        config: 'webpack.config.js',
+      },
     },
   },
   rules: {
@@ -28,25 +35,15 @@ module.exports = {
         allow: ['error', 'warn'],
       },
     ],
-    'no-multi-spaces': [
-      'error',
-      {
-        exceptions: {
-          ImportDeclaration: true,
-          Property: false,
-          VariableDeclarator: true,
-        },
-      },
-    ],
-    'react/jsx-uses-vars': 1,
-    'react/jsx-uses-react': 1,
+    'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'prettier/prettier': [
       'error',
       {
         singleQuote: true,
-        semi: false,
       },
     ],
+    'react/jsx-uses-vars': 1,
+    'react/jsx-uses-react': 1,
   },
   overrides: [
     {
@@ -57,4 +54,4 @@ module.exports = {
     },
   ],
   ignorePatterns: ['node_modules', '!.*rc.js', directory.dist],
-}
+};

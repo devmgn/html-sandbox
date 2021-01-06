@@ -3,8 +3,8 @@
  * @see https://jestjs.io
  */
 
-const path = require('path')
-const { directory, javascriptGlobPattern } = require('./config')
+const path = require('path');
+const { directory, javascriptGlobPattern } = require('./config');
 
 module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
@@ -21,4 +21,4 @@ module.exports = {
     },
   },
   testMatch: [path.join('<rootDir>', `test/**/*.(spec|test).${javascriptGlobPattern}`)],
-}
+};

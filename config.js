@@ -5,8 +5,8 @@
 /** @typedef { { src: string; dist: string; javascript: string; publicPath: string; } } Directory */
 /** @typedef { import('svgo').Options } SVGOOptions */
 
-const { config } = require('./package.json')
-const { ConvertPath } = require('./utilities')
+const { config } = require('./package.json');
+const { ConvertPath } = require('./utilities');
 
 module.exports = {
   /** @type { Directory } */
@@ -46,4 +46,4 @@ module.exports = {
 
   /** @type { string } */
   javascriptGlobPattern: '[jt]s?(x)',
-}
+};

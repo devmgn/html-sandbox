@@ -4,53 +4,53 @@
  */
 
 /** @typedef { import('webpack').Configuration } WebpackConfiguration */
-/** @typedef { import('webpack').RuleSetRule } WebpackRuleSetRule */
 /** @typedef { import('svg-sprite-loader') } SVGLoaderOptions */
 
-const glob = require('glob')
-const path = require('path')
-const sass = require('sass')
-const fibers = require('fibers')
-const nodeSassGlobImporter = require('node-sass-glob-importer')
-const imageminJpegtran = require('imagemin-jpegtran')
-const imageminOptipng = require('imagemin-optipng')
-const imageminGifsicle = require('imagemin-gifsicle')
-const imageminWebp = require('imagemin-webp')
-const imageminSvgo = require('imagemin-svgo')
+const glob = require('glob');
+const path = require('path');
+const sass = require('sass');
+const fibers = require('fibers');
+const nodeSassGlobImporter = require('node-sass-glob-importer');
+const imageminJpegtran = require('imagemin-jpegtran');
+const imageminOptipng = require('imagemin-optipng');
+const imageminGifsicle = require('imagemin-gifsicle');
+const imageminWebp = require('imagemin-webp');
+const imageminSvgo = require('imagemin-svgo');
 
 // webpack plugins
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // @ts-ignore
 // TODO: fix types
-const WebpackRemoveEmptyScripts = require('webpack-remove-empty-scripts')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const WebpackRemoveEmptyScripts = require('webpack-remove-empty-scripts');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // configurations
-const { directory, javascriptGlobPattern, svgoOptions, placeholder, resolvedTarget, copyTarget } = require('./config')
+const { directory, javascriptGlobPattern, svgoOptions, placeholder, resolvedTarget, copyTarget } = require('./config');
 
 /** @returns { WebpackConfiguration } */
 module.exports = () => {
-  const isProductionBuild = process.env.NODE_ENV === 'production'
+  const isProductionBuild = process.env.NODE_ENV === 'production';
 
   const getMultipleEntry = () => {
-    /** @type { { [key: string]: string } } */
-    const initialEntry = {}
     return glob
       .sync(`**/@(?(*.)bundle.${javascriptGlobPattern}|[^_]*.s[ac]ss)`, { cwd: directory.src })
       .reduce((entry, src) => {
         const name = path.format({
           dir: path.dirname(src),
           name: path.parse(src).name,
-        })
-        entry[name] = path.resolve(directory.src, src)
-        return entry
-      }, initialEntry)
-  }
+        });
 
-  /** @type { WebpackRuleSetRule } */
+        return Object.assign(entry, { [name]: path.resolve(directory.src, src) });
+      }, {});
+  };
+
+  const sourceMap = {
+    sourceMap: !isProductionBuild,
+  };
+
   const assetModuleOptions = {
     type: 'asset',
     parser: {
@@ -58,15 +58,14 @@ module.exports = () => {
         maxSize: 1024 / 4,
       },
     },
-  }
+  };
 
-  /** @type { WebpackRuleSetRule } */
   const imageminSvgOptions = {
     loader: 'img-loader',
     options: {
       plugins: [imageminSvgo(svgoOptions)],
     },
-  }
+  };
 
   return {
     mode: isProductionBuild ? 'production' : 'development',
@@ -78,7 +77,7 @@ module.exports = () => {
       assetModuleFilename: (pathData) => {
         return pathData.filename
           ? path.join(path.relative(directory.src, path.dirname(pathData.filename)), `${placeholder}[ext]`)
-          : ''
+          : '';
       },
     },
     module: {
@@ -101,21 +100,16 @@ module.exports = () => {
             MiniCssExtractPlugin.loader,
             {
               loader: 'css-loader',
-              options: {
-                sourceMap: !isProductionBuild,
-                importLoaders: 2,
-              },
+              options: { ...sourceMap },
             },
             {
               loader: 'postcss-loader',
-              options: {
-                sourceMap: !isProductionBuild,
-              },
+              options: { ...sourceMap },
             },
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: !isProductionBuild,
+                ...sourceMap,
                 implementation: sass,
                 sassOptions: {
                   fiber: fibers,
@@ -145,7 +139,7 @@ module.exports = () => {
         },
         // Raster Images
         ...[/\.jpe?g$/i, /\.png$/i, /\.gif$/i, /\.webp$/i].map((pattern, index) => {
-          const plugins = [imageminJpegtran(), imageminOptipng(), imageminGifsicle(), imageminWebp()]
+          const plugins = [imageminJpegtran(), imageminOptipng(), imageminGifsicle(), imageminWebp()];
           return {
             test: pattern,
             ...assetModuleOptions,
@@ -157,7 +151,7 @@ module.exports = () => {
                 },
               },
             ],
-          }
+          };
         }),
         // svg
         {
@@ -177,10 +171,7 @@ module.exports = () => {
                   loader: 'svg-sprite-loader',
                   options: {
                     /** @type { SVGLoaderOptions } */
-                    symbolId: (filePath) => {
-                      if (typeof filePath !== 'string') return
-                      return path.basename(filePath, '.svg')
-                    },
+                    symbolId: (filePath) => (typeof filePath === 'string' ? path.basename(filePath, '.svg') : ''),
                   },
                 },
                 imageminSvgOptions,
@@ -239,7 +230,7 @@ module.exports = () => {
               collapseBooleanAttributes: true,
               collapseWhitespace: isProductionBuild,
             },
-          })
+          });
         }),
       new MiniCssExtractPlugin({
         filename: `${placeholder}.css`,
@@ -272,6 +263,5 @@ module.exports = () => {
     devServer: {
       open: true,
     },
-    target: isProductionBuild ? 'browserslist' : 'web',
-  }
-}
+  };
+};

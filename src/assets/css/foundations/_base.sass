@@ -25,6 +25,8 @@
 html
   font-family: $font-family-base
   line-height: 1
+  word-wrap: break-word
+  overflow-wrap: break-word
   -webkit-tap-highlight-color: transparent // 1
   -webkit-font-smoothing: antialiased // 2
   -moz-osx-font-smoothing: grayscale // 2
@@ -43,7 +45,7 @@ body
 // =============================================================================
 
 address
-  font-style: normal
+  font-style: inherit
 
 h1,
 h2,
@@ -53,8 +55,8 @@ h5,
 h6
   margin-top: 0
   margin-bottom: 0
-  font-weight: normal
-  font-size: 100%
+  font-weight: inherit
+  font-size: inherit
 
 // Add the correct display in IE.
 main
@@ -95,6 +97,7 @@ p
 pre
   margin-top: 0
   margin-bottom: 0
+  font-family: $font-family-monospace
 
 // =============================================================================
 // Inline text semantics
@@ -218,6 +221,12 @@ textarea
 button
   overflow: visible // 1
   text-transform: none // 2
+
+button,
+[type="button"],
+[type="submit"],
+[type="reset"]
+  text-align: inherit
   &:not(:disabled)
     cursor: pointer
 
@@ -245,6 +254,9 @@ select
 // Remove the default vertical scrollbar in IE
 textarea
   overflow: auto
+
+label[for]
+  cursor: pointer
 
 fieldset
   margin-right: 0
@@ -277,9 +289,10 @@ summary
   display: list-item
 
 // =============================================================================
-// Interactive elements
+// Web Components
 // =============================================================================
 
+// Add the correct display in IE 10+.
 template
   display: none
 
@@ -296,3 +309,6 @@ select,
 textarea,
 [tabindex]
   touch-action: manipulation
+
+[role="button"]
+  cursor: pointer

@@ -2,8 +2,9 @@
  * Utility scripts
  */
 
-const path = require('path')
-const SEPARATOR_REGEXP = new RegExp(`${path.sep}$`)
+const path = require('path');
+
+const SEPARATOR_REGEXP = new RegExp(`${path.sep}$`);
 
 /**
  * Convert path to absolute or relative path
@@ -14,8 +15,10 @@ module.exports.ConvertPath = class {
    * @returns { string }
    */
   static toRelative(targetPath) {
-    targetPath = path.normalize(targetPath)
-    return path.isAbsolute(targetPath) ? targetPath.replace(path.parse(targetPath).root, '') : targetPath
+    const normalizedPath = path.normalize(targetPath);
+    return path.isAbsolute(normalizedPath)
+      ? normalizedPath.replace(path.parse(normalizedPath).root, '')
+      : normalizedPath;
   }
 
   /**
@@ -23,7 +26,7 @@ module.exports.ConvertPath = class {
    * @returns { string }
    */
   static toAbsolute(targetPath) {
-    targetPath = `${path.normalize(targetPath).replace(SEPARATOR_REGEXP, '')}/`
-    return path.isAbsolute(targetPath) ? targetPath : path.join(path.sep, targetPath)
+    const normalizedPath = `${path.normalize(targetPath).replace(SEPARATOR_REGEXP, '')}${path.sep}`;
+    return path.isAbsolute(normalizedPath) ? normalizedPath : path.join(path.sep, normalizedPath);
   }
-}
+};

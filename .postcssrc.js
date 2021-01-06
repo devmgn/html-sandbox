@@ -3,12 +3,13 @@
  * @see https://postcss.org
  */
 
-const autoprefixer = require('autoprefixer')
-const postcssSortMediaQueries = require('postcss-sort-media-queries')
-const postcssFlexbugsFixes = require('postcss-flexbugs-fixes')
-const cssnano = require('cssnano')
+/* eslint-disable import/no-extraneous-dependencies */
+const autoprefixer = require('autoprefixer');
+const postcssSortMediaQueries = require('postcss-sort-media-queries');
+const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
+const cssnano = require('cssnano');
 
-const { svgoOptions } = require('./config')
+const { svgoOptions } = require('./config');
 
 module.exports = {
   plugins: [
@@ -26,4 +27,4 @@ module.exports = {
       ],
     }),
   ],
-}
+};
