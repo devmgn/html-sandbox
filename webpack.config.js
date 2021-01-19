@@ -257,11 +257,5 @@ module.exports = () => {
     cache: {
       type: 'filesystem',
     },
-    // TODO: fix webpack5 problems
-    // @see https://github.com/webpack/webpack-dev-server/issues/2765
-    // @see https://github.com/webpack/webpack-dev-server/issues/2758
-    devServer: {
-      open: true,
-    },
   };
 };
