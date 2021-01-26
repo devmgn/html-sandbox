@@ -44,6 +44,12 @@ module.exports = {
     ],
     'react/jsx-uses-vars': 1,
     'react/jsx-uses-react': 1,
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', json: 'never' },
+    ],
   },
   overrides: [
     {
