@@ -207,8 +207,6 @@ module.exports = () => {
       },
     },
     plugins: [
-      // TODO: fix webpack5 deprecation warning
-      // @see https://github.com/jantimon/html-webpack-plugin/issues/1527
       ...glob
         .sync('**/[!_]*.pug', {
           cwd: directory.src,
