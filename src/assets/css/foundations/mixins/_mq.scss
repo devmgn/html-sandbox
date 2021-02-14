@@ -1,0 +1,68 @@
+@use "sass:map";
+@use "sass:meta";
+@use "../variables" as *;
+@use "../functions" as *;
+
+/// Media Query mixin
+///
+/// @param {String | Null} $from [null] - One of $mq-breakpoints
+/// @param {String | Null} $until [null] - One of $mq-breakpoints
+/// @param {String | Null} $and [null] - Additional media query parameters
+///
+/// @example sass
+///   .foo {
+///     @include mq(s) {
+///       color: red;
+///     }
+///     @include mq($until: s) {
+///       color: blue;
+///     }
+///     @include mq(s, m) {
+///       color: green;
+///     }
+///     @include mq($until: 750px, $and: "(orientation: landscape)") {
+///       color: teal;
+///     }
+///   }
+@mixin mq($from: null, $until: null, $and: null) {
+  $min-width: 0;
+  $max-width: 0;
+  $media-query-string: "";
+
+  @if $from != null {
+    $min-width: _get-pixel-formatted-width($from);
+  }
+
+  @if $until != null {
+    $max-width: _get-pixel-formatted-width($until);
+  }
+
+  @if $min-width != 0 {
+    $media-query-string: "#{$media-query-string} and (min-width: #{$min-width})";
+  }
+
+  @if $max-width != 0 {
+    $media-query-string: "#{$media-query-string} and (max-width: #{$max-width - 1px})";
+  }
+
+  @if $and != null {
+    $media-query-string: "#{$media-query-string} and #{$and}";
+  }
+
+  @media #{str-replace("and ", "", $media-query-string)} {
+    @content;
+  }
+}
+
+/// Get pixel formatted width
+///
+/// @access private
+/// @param {Number | List} $width
+/// @returns {Number} - px formatted width
+@function _get-pixel-formatted-width($width) {
+  @if meta.type-of($width) == number {
+    @return strip-unit($width) * 1px;
+  } @else {
+    @return strip-unit(map.get($breakpoints, $width)) * 1px;
+  }
+}

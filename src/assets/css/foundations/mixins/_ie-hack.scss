@@ -1,0 +1,9 @@
+//
+// IE11 hack mixin
+//
+@mixin ie-hack() {
+  @at-root _:-ms-fullscreen,
+    :root & {
+    @content;
+  }
+}

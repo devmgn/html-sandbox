@@ -8,12 +8,17 @@ const { directory } = require('./config');
 module.exports = {
   root: true,
   env: {
-    es6: true,
+    es2021: true,
     browser: true,
     'jest/globals': true,
   },
-  extends: ['airbnb', 'airbnb/hooks', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
-  plugins: ['prettier', 'react', 'jest'],
+  extends: [
+    'airbnb',
+    'airbnb/hooks',
+    'plugin:react/recommended',
+    'plugin:jest/recommended',
+    'plugin:prettier/recommended',
+  ],
   parserOptions: {
     sourceType: 'module',
     project: 'tsconfig.json',
@@ -42,8 +47,6 @@ module.exports = {
         singleQuote: true,
       },
     ],
-    'react/jsx-uses-vars': 1,
-    'react/jsx-uses-react': 1,
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'import/extensions': [
       'error',
@@ -54,8 +57,11 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts?(x)'],
-      extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
-      plugins: ['@typescript-eslint'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'prettier/@typescript-eslint',
+      ],
       parser: '@typescript-eslint/parser',
     },
   ],

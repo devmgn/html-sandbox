@@ -1,0 +1,27 @@
+@use "sass:string";
+
+/// Replace all occurrences of the search string with the replacement string
+///
+/// @param {String} $search - The value being searched for.
+/// @param {String} $replace - The replacement value.
+/// @param {String} $subject - The string being searched and replaced on.
+/// @param {Boolean} $match-all [false] - If true, Replace all matched values.
+///
+/// @returns {String} - This function returns a string with the replaced values.
+@function str-replace($search, $replace, $subject, $match-all: false) {
+  $position: string.index($subject, $search);
+
+  @while $position != null {
+    $start: string.slice($subject, 0, $position - 1);
+    $end: string.slice($subject, $position + string.length($search));
+    $subject: $start + $replace + $end;
+
+    @if $match-all == true {
+      $position: string.index($subject, $search);
+    } @else {
+      $position: null;
+    }
+  }
+
+  @return $subject;
+}

@@ -99,6 +99,7 @@ modules.xml
 # Icon must end with two \r
 Icon
 
+
 # Thumbnails
 ._*
 
@@ -173,6 +174,9 @@ typings/
 
 # Optional eslint cache
 .eslintcache
+
+# Optional stylelint cache
+.stylelintcache
 
 # Microbundle cache
 .rpt2_cache/

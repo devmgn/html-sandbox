@@ -36,7 +36,7 @@ module.exports = () => {
 
   const getMultipleEntry = () => {
     return glob
-      .sync(`**/@(?(*.)bundle.${javascriptGlobPattern}|[^_]*.s[ac]ss)`, { cwd: directory.src })
+      .sync(`**/@(?(*.)bundle.${javascriptGlobPattern}|[^_]*.scss)`, { cwd: directory.src })
       .reduce((entry, src) => {
         const name = path.format({
           dir: path.dirname(src),
@@ -95,7 +95,7 @@ module.exports = () => {
         },
         // Sass
         {
-          test: /\.s[ac]ss$/i,
+          test: /\.scss$/i,
           use: [
             MiniCssExtractPlugin.loader,
             {

@@ -1,0 +1,371 @@
+//
+// base & reset styles
+// stylelint-disable no-descending-specificity
+//
+
+@use 'variables' as *;
+
+// ==========================================================================
+// Main root
+// ==========================================================================
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+}
+
+::before,
+::after {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+// 1. Remove the grey highlight on links in iOS
+// 2. Improving font rendering in macOS
+// 3. Prevent adjustments of font size after orientation changes in iOS
+html {
+  font-family: $font-family-base;
+  line-height: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  -webkit-tap-highlight-color: transparent; // 1
+  -webkit-font-smoothing: antialiased; // 2
+  -moz-osx-font-smoothing: grayscale; // 2
+  -webkit-text-size-adjust: 100%; // 3
+}
+
+// ==========================================================================
+// Sectioning root
+// ==========================================================================
+
+body {
+  min-width: 320px;
+  margin: 0;
+}
+
+// ==========================================================================
+// Sectioning root
+// ==========================================================================
+
+address {
+  font-style: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+// Add the correct display in IE.
+main {
+  display: block;
+}
+
+// ==========================================================================
+// Text content
+// ==========================================================================
+
+blockquote {
+  margin: 0;
+}
+
+dl {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+dd {
+  margin-left: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+hr {
+  margin: 0;
+  border-style: none;
+}
+
+ol,
+ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: $font-family-monospace;
+}
+
+// ==========================================================================
+// Inline text semantics
+// ==========================================================================
+
+abbr[title] {
+  text-decoration: none;
+}
+
+b,
+strong {
+  font-weight: normal;
+}
+
+cite,
+dfn,
+em,
+i,
+var {
+  font-style: normal;
+}
+
+code,
+kbd,
+samp {
+  font-family: $font-family-monospace;
+}
+
+mark {
+  color: inherit;
+  background-color: transparent;
+}
+
+q {
+  &::before,
+  &::after {
+    content: none;
+  }
+}
+
+small {
+  font-size: 100%;
+}
+
+sub,
+sup {
+  font-size: 100%;
+  vertical-align: inherit;
+}
+
+// ==========================================================================
+// Image and multimedia
+// ==========================================================================
+
+audio,
+img,
+video {
+  vertical-align: middle;
+}
+
+// ==========================================================================
+// Embedded content
+// ==========================================================================
+
+iframe {
+  vertical-align: middle;
+  border-style: none;
+}
+
+// ==========================================================================
+// SVG and MathML
+// ==========================================================================
+
+// 1. Change the fill color to match the text color in all browsers
+// 2. Hide the overflow in IE.
+svg {
+  vertical-align: middle;
+  &:not([fill]) {
+    fill: currentColor; // 1
+  }
+  &:not(:root) {
+    overflow: hidden; // 2
+  }
+}
+
+// ==========================================================================
+// Scripting
+// ==========================================================================
+
+canvas {
+  display: inline-block;
+}
+
+// ==========================================================================
+// Table content
+// ==========================================================================
+
+caption {
+  text-align: inherit;
+}
+
+table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+tbody,
+tfoot,
+thead {
+  vertical-align: inherit;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+th {
+  font-weight: inherit;
+  text-align: left;
+}
+
+// ==========================================================================
+// Forms
+// ==========================================================================
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  background-color: transparent;
+  border-style: none;
+}
+
+// 1. Show the overflow in IE.
+// 2. Remove the inheritance of text transform in Edge 18-, Firefox, and IE.
+button {
+  overflow: visible; // 1
+  text-transform: none; // 2
+}
+
+button,
+[type="button"],
+[type="submit"],
+[type="reset"] {
+  text-align: inherit;
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+input,
+textarea {
+  border-radius: 0;
+  &:disabled {
+    opacity: 1;
+  }
+  &::placeholder {
+    color: inherit;
+    opacity: 1;
+  }
+}
+
+// 1. Remove the inheritance of text transform in Firefox.
+select {
+  text-transform: none; // 1
+  border-radius: 0;
+  appearance: none;
+  &:disabled {
+    opacity: 1;
+  }
+  &::-ms-expand {
+    display: none;
+  }
+  &::-ms-value {
+    color: inherit;
+  }
+}
+
+// Remove the default vertical scrollbar in IE
+textarea {
+  overflow: auto;
+}
+
+label[for] {
+  cursor: pointer;
+}
+
+fieldset {
+  min-width: 0;
+  margin-right: 0;
+  margin-left: 0;
+  padding: 0;
+  border-style: none;
+}
+
+legend {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+// ==========================================================================
+// Interactive elements
+// ==========================================================================
+
+details {
+  display: block;
+}
+
+dialog {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border-style: none;
+  &:not([open]) {
+    display: none;
+  }
+}
+
+summary {
+  display: list-item;
+}
+
+// ==========================================================================
+// Web Components
+// ==========================================================================
+
+// Add the correct display in IE 10+.
+template {
+  display: none;
+}
+
+// ==========================================================================
+// User interaction
+// ==========================================================================
+
+// Remove the tapping delay on clickable elements
+a,
+button,
+input,
+label,
+select,
+textarea,
+[tabindex] {
+  touch-action: manipulation;
+}
+
+[role="button"] {
+  cursor: pointer;
+}

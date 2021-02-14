@@ -1,0 +1,17 @@
+@use "sass:math";
+@use "strip-unit" as *;
+
+/// Convert px to vw
+///
+/// @param {Number} $px
+/// @param {Number} $viewport-size [375px] - default viewport size
+///
+/// @returns {Number} - vw converted number
+@function vw($px, $viewport-size: 375px) {
+  @if math.unit($px) != "px" {
+    @warn "The unit of first argument must be 'px'.";
+    @return $px;
+  }
+
+  @return (strip-unit($px) / strip-unit($viewport-size)) * 100vw;
+}

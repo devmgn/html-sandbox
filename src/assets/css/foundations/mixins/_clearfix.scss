@@ -1,0 +1,10 @@
+//
+// Clear floated content
+//
+@mixin clearfix() {
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+}

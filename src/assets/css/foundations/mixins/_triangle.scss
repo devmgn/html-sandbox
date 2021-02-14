@@ -1,0 +1,59 @@
+@use "sass:math";
+@use "../functions/strip-unit" as *;
+
+/// Triangle mixin
+///
+/// @param {String} $direction - triangle direction (top, right, bottom, left)
+/// @param {String} $color - triangle color
+/// @param {Number} $width - triangle height
+/// @param {Number | Null} $height [null] - triangle height, equilateral triangle for null
+///
+/// @example sass
+///   .foo {
+///     @include triangle(top, red, 100px, 200px);
+///     @include triangle(right, blue, 100px);
+///   }
+@mixin triangle($direction, $color, $width, $height: null) {
+  $width: strip-unit($width);
+  $height: strip-unit($height);
+  $half_width: $width / 2;
+  $half_height: $height / 2;
+  $equilateral_triangle_width: (2 / math.sqrt(3)) * $half_width;
+  $equilateral_triangle_height: (math.sqrt(3) / 2) * $width;
+
+  border-style: solid;
+
+  @if $direction == "top" {
+    border-color: transparent transparent $color;
+
+    @if $height == null {
+      border-width: 0 ($half_width * 1px) ($equilateral_triangle_height * 1px);
+    } @else {
+      border-width: 0 ($half_width * 1px) ($height * 1px);
+    }
+  } @else if $direction == "right" {
+    border-color: transparent transparent transparent $color;
+
+    @if $height == null {
+      border-width: ($equilateral_triangle_width * 1px) 0 ($equilateral_triangle_width * 1px) ($width * 1px);
+    } @else {
+      border-width: ($half_height * 1px) 0 ($half_height * 1px) ($width * 1px);
+    }
+  } @else if $direction == "bottom" {
+    border-color: $color transparent transparent;
+
+    @if $height == null {
+      border-width: ($equilateral_triangle_height * 1px) ($half_width * 1px) 0;
+    } @else {
+      border-width: ($height * 1px) ($half_width * 1px) 0;
+    }
+  } @else if $direction == "left" {
+    border-color: transparent $color transparent transparent;
+
+    @if $height == null {
+      border-width: ($equilateral_triangle_width * 1px) ($width * 1px) ($equilateral_triangle_width * 1px) 0;
+    } @else {
+      border-width: ($half_height * 1px) ($width * 1px) ($half_height * 1px) 0;
+    }
+  }
+}

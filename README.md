@@ -23,7 +23,7 @@ The following default values can be changed by editing `config.directory` in `pa
 ```typescript
 import foo as bar from '@/baz'
 ```
-Default resolved path: `assets/js`  
+Default resolved path: `assets/js`
 *`@` is the alias of the resolved path
 
 ### Images
@@ -49,8 +49,9 @@ svg
   use(xlink:href="#file")
 ```
 
-#### SASS or SCSS
-```sass
-.foo
+#### SCSS
+```scss
+.foo {
   background-image: url(~assets/images/foo.jpg)
+}
 ```
