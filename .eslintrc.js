@@ -18,6 +18,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:jest/recommended',
     'plugin:prettier/recommended',
+    'prettier',
   ],
   parserOptions: {
     sourceType: 'module',
@@ -51,7 +52,13 @@ module.exports = {
     'import/extensions': [
       'error',
       'ignorePackages',
-      { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', json: 'never' },
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+        json: 'never',
+      },
     ],
   },
   overrides: [
@@ -60,7 +67,6 @@ module.exports = {
       extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'prettier/@typescript-eslint',
       ],
       parser: '@typescript-eslint/parser',
     },

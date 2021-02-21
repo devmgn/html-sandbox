@@ -18,6 +18,7 @@ const imageminWebp = require('imagemin-webp');
 const imageminSvgo = require('imagemin-svgo');
 
 // webpack plugins
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // @ts-ignore
@@ -205,6 +206,11 @@ module.exports = () => {
           },
         },
       },
+      minimizer: [
+        new TerserWebpackPlugin({
+          extractComments: false,
+        }),
+      ],
     },
     plugins: [
       ...glob
