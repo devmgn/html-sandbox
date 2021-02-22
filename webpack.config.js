@@ -21,6 +21,7 @@ const imageminSvgo = require('imagemin-svgo');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 // @ts-ignore
 // TODO: fix types
 const WebpackFixStyleOnlyEntries = require('webpack-fix-style-only-entries');
@@ -29,7 +30,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // configurations
-const { directory, javascriptGlobPattern, svgoOptions, placeholder, resolvedTarget, copyTarget } = require('./config');
+const { directory, javascriptGlobPattern, placeholder, resolvedTarget, copyTarget } = require('./config');
 
 /** @returns { WebpackConfiguration } */
 module.exports = () => {
@@ -61,10 +62,24 @@ module.exports = () => {
     },
   };
 
+  /**
+   * svgo options
+   * @see https://github.com/svg/svgo
+   */
   const imageminSvgOptions = {
     loader: 'img-loader',
     options: {
-      plugins: [imageminSvgo(svgoOptions)],
+      plugins: [
+        imageminSvgo({
+          plugins: [
+            {
+              removeAttrs: { attrs: 'data.*' },
+              removeDimensions: true,
+              removeViewBox: false,
+            },
+          ],
+        }),
+      ],
     },
   };
 
@@ -206,9 +221,21 @@ module.exports = () => {
           },
         },
       },
+      minimize: true,
       minimizer: [
         new TerserWebpackPlugin({
           extractComments: false,
+        }),
+        new CssMinimizerWebpackPlugin({
+          minimizerOptions: {
+            preset: [
+              'default',
+              {
+                calc: false,
+                reduceInitial: false,
+              },
+            ],
+          },
         }),
       ],
     },
@@ -255,7 +282,7 @@ module.exports = () => {
       new CleanWebpackPlugin(),
       new FriendlyErrorsWebpackPlugin(),
     ],
-    devtool: !isProductionBuild && 'source-map',
+    devtool: !isProductionBuild && 'inline-source-map',
     cache: {
       type: 'filesystem',
     },

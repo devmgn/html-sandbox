@@ -11,6 +11,7 @@ module.exports = {
     // Stylistic issues
     'function-name-case': 'lower',
     'function-url-quotes': 'never',
+    'string-quotes': 'double',
     'shorthand-property-no-redundant-values': true,
     'declaration-block-no-redundant-longhand-properties': true,
     'selector-pseudo-element-colon-notation': 'double',
@@ -23,6 +24,6 @@ module.exports = {
     'scss/no-duplicate-mixins': true,
     'scss/no-global-function-names': true,
     // stylelint-order
-    'order/order': ['dollar-variables', 'custom-properties', 'declarations', 'rules', 'at-rules'],
+    'order/order': ['dollar-variables', 'custom-properties', 'declarations', 'at-rules', 'rules'],
   },
 };

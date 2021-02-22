@@ -24,21 +24,6 @@ module.exports = {
   copyTarget: config.copyTarget,
 
   /**
-   * svgo options
-   * @see https://github.com/svg/svgo#what-it-can-do
-   * @type { SVGOOptions }
-   */
-  svgoOptions: {
-    plugins: [
-      {
-        removeAttrs: { attrs: 'data.*' },
-        removeDimensions: true,
-        removeViewBox: false,
-      },
-    ],
-  },
-
-  /**
    * placeholder
    * @type { string }
    */

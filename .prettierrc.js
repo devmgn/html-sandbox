@@ -14,8 +14,8 @@ module.exports = {
       files: '*.pug',
       options: {
         parser: 'pug',
-        singleQuote: false,
-        attributeSeparator: 'as-needed',
+        pugSingleQuote: false,
+        pugAttributeSeparator: 'as-needed',
       },
     },
   ],

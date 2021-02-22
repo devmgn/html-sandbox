@@ -4,13 +4,13 @@ meta(name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale
 meta(http-equiv="X-UA-Compatible" content="IE=edge")
 title= title
 meta(name="description" content=description)
-if (styles)
+if styles
   each style in styles
     - const stylePath = htmlWebpackPlugin.files.css.find((src) => src.includes(style.replace('.css', '')));
-    if (stylePath)
+    if stylePath
       link(rel="stylesheet" href=stylePath)
-if (scripts)
+if scripts
   each script in scripts
     - const scriptPath = htmlWebpackPlugin.files.js.find((src) => src.includes(script.replace('.js', '')));
-    if (scriptPath)
+    if scriptPath
       script(src=scriptPath defer)
