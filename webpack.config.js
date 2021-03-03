@@ -16,6 +16,9 @@ const imageminOptipng = require('imagemin-optipng');
 const imageminGifsicle = require('imagemin-gifsicle');
 const imageminWebp = require('imagemin-webp');
 const imageminSvgo = require('imagemin-svgo');
+// TODO: fix types
+// @ts-ignore
+const { extendDefaultPlugins } = require('svgo');
 
 // webpack plugins
 const TerserWebpackPlugin = require('terser-webpack-plugin');
@@ -71,13 +74,11 @@ module.exports = () => {
     options: {
       plugins: [
         imageminSvgo({
-          plugins: [
-            {
-              removeAttrs: { attrs: 'data.*' },
-              removeDimensions: true,
-              removeViewBox: false,
-            },
-          ],
+          plugins: extendDefaultPlugins([
+            { name: 'removeViewBox', active: false },
+            { name: 'removeDimensions', active: true },
+            { name: 'removeAttrs', active: true, params: { attrs: 'data.*' } },
+          ]),
         }),
       ],
     },
@@ -261,6 +262,7 @@ module.exports = () => {
               collapseBooleanAttributes: true,
               collapseWhitespace: isProductionBuild,
             },
+            isProduction: isProductionBuild,
           });
         }),
       new MiniCssExtractPlugin({
