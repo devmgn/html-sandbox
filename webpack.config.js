@@ -275,7 +275,7 @@ module.exports = () => {
         patterns: [
           {
             from: copyTarget,
-            to: '[path][name].[ext]',
+            to: '[path][name][ext]',
             context: directory.src,
             noErrorOnMissing: true,
           },
