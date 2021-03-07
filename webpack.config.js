@@ -4,7 +4,7 @@
  */
 
 /** @typedef { import('webpack').Configuration } WebpackConfiguration */
-/** @typedef { import('svg-sprite-loader') } SVGLoaderOptions */
+/** @typedef { import('svg-sprite-loader') } SVGSpriteLoaderOptions */
 
 const glob = require('glob');
 const path = require('path');
@@ -16,8 +16,6 @@ const imageminOptipng = require('imagemin-optipng');
 const imageminGifsicle = require('imagemin-gifsicle');
 const imageminWebp = require('imagemin-webp');
 const imageminSvgo = require('imagemin-svgo');
-// TODO: fix types
-// @ts-ignore
 const { extendDefaultPlugins } = require('svgo');
 
 // webpack plugins
@@ -74,10 +72,12 @@ module.exports = () => {
     options: {
       plugins: [
         imageminSvgo({
+          // TODO: fix types
+          // @ts-ignore
           plugins: extendDefaultPlugins([
             { name: 'removeViewBox', active: false },
             { name: 'removeDimensions', active: true },
-            { name: 'removeAttrs', active: true, params: { attrs: 'data.*' } },
+            { name: 'removeAttrs', active: true, params: { attrs: ['data.*'] } },
           ]),
         }),
       ],
@@ -187,7 +187,7 @@ module.exports = () => {
                 {
                   loader: 'svg-sprite-loader',
                   options: {
-                    /** @type { SVGLoaderOptions } */
+                    /** @type { SVGSpriteLoaderOptions } */
                     symbolId: (filePath) => (typeof filePath === 'string' ? path.basename(filePath, '.svg') : ''),
                   },
                 },
