@@ -3,7 +3,6 @@
  */
 
 /** @typedef { { src: string; dist: string; javascript: string; publicPath: string; } } Directory */
-/** @typedef { import('svgo').Options } SVGOOptions */
 
 const { config } = require('./package.json');
 const { ConvertPath } = require('./utilities');

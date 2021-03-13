@@ -5,6 +5,7 @@
 
 /** @typedef { import('webpack').Configuration } WebpackConfiguration */
 /** @typedef { import('svg-sprite-loader') } SVGSpriteLoaderOptions */
+/** @typedef { import('svgo') } SVGO */
 
 const glob = require('glob');
 const path = require('path');
@@ -72,8 +73,7 @@ module.exports = () => {
     options: {
       plugins: [
         imageminSvgo({
-          // TODO: fix types
-          // @ts-ignore
+          /** @type { any } */
           plugins: extendDefaultPlugins([
             { name: 'removeViewBox', active: false },
             { name: 'removeDimensions', active: true },
