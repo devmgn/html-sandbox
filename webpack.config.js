@@ -6,6 +6,7 @@
 /** @typedef { import('webpack').Configuration } WebpackConfiguration */
 /** @typedef { import('svg-sprite-loader') } SVGSpriteLoaderOptions */
 /** @typedef { import('svgo') } SVGO */
+/** @typedef { import('imagemin-svgo').Options }  */
 
 const glob = require('glob');
 const path = require('path');
@@ -17,7 +18,7 @@ const imageminOptipng = require('imagemin-optipng');
 const imageminGifsicle = require('imagemin-gifsicle');
 const imageminWebp = require('imagemin-webp');
 const imageminSvgo = require('imagemin-svgo');
-const { extendDefaultPlugins } = require('svgo');
+const svgo = require('svgo');
 
 // webpack plugins
 const TerserWebpackPlugin = require('terser-webpack-plugin');
@@ -74,7 +75,7 @@ module.exports = () => {
       plugins: [
         imageminSvgo({
           /** @type { any } */
-          plugins: extendDefaultPlugins([
+          plugins: svgo.extendDefaultPlugins([
             { name: 'removeViewBox', active: false },
             { name: 'removeDimensions', active: true },
             { name: 'removeAttrs', active: true, params: { attrs: ['data.*'] } },
