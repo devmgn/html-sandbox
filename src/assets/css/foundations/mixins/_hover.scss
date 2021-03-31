@@ -1,0 +1,10 @@
+//
+// Mediaquery Hover Implementation for IE11
+//
+@mixin hover() {
+  @media (hover: hover), (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    &:hover {
+      @content;
+    }
+  }
+}
