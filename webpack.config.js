@@ -4,9 +4,6 @@
  */
 
 /** @typedef { import('webpack').Configuration } WebpackConfiguration */
-/** @typedef { import('svg-sprite-loader') } SVGSpriteLoaderOptions */
-/** @typedef { import('svgo') } SVGO */
-/** @typedef { import('imagemin-svgo').Options }  */
 
 const glob = require('glob');
 const path = require('path');
@@ -33,7 +30,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // configurations
-const { directory, javascriptGlobPattern, placeholder, resolvedTarget, copyTarget } = require('./config');
+const { directory, javascriptPattern, resourcesRegExp, targetsPatternToCopy, placeholders } = require('./config');
 
 /** @returns { WebpackConfiguration } */
 module.exports = () => {
@@ -41,7 +38,7 @@ module.exports = () => {
 
   const getMultipleEntry = () => {
     return glob
-      .sync(`**/@(?(*.)bundle.${javascriptGlobPattern}|[^_]*.scss)`, { cwd: directory.src })
+      .sync(`**/@(?(*.)bundle.${javascriptPattern}|[^_]*.scss)`, { cwd: directory.src })
       .reduce((entry, src) => {
         const name = path.format({
           dir: path.dirname(src),
@@ -65,36 +62,16 @@ module.exports = () => {
     },
   };
 
-  /**
-   * svgo options
-   * @see https://github.com/svg/svgo
-   */
-  const imageminSvgOptions = {
-    loader: 'img-loader',
-    options: {
-      plugins: [
-        imageminSvgo({
-          /** @type { any } */
-          plugins: svgo.extendDefaultPlugins([
-            { name: 'removeViewBox', active: false },
-            { name: 'removeDimensions', active: true },
-            { name: 'removeAttrs', active: true, params: { attrs: ['data.*'] } },
-          ]),
-        }),
-      ],
-    },
-  };
-
   return {
     mode: isProductionBuild ? 'production' : 'development',
     entry: getMultipleEntry(),
     output: {
       path: path.resolve(directory.dist),
-      filename: `${placeholder}.js`,
+      filename: `${placeholders}.js`,
       publicPath: isProductionBuild ? directory.publicPath : '/',
       assetModuleFilename: (pathData) => {
         return pathData.filename
-          ? path.join(path.relative(directory.src, path.dirname(pathData.filename)), `${placeholder}[ext]`)
+          ? path.join(path.relative(directory.src, path.dirname(pathData.filename)), `${placeholders}[ext]`)
           : '';
       },
     },
@@ -152,14 +129,14 @@ module.exports = () => {
         },
         // Assets
         {
-          test: resolvedTarget,
+          test: resourcesRegExp,
           type: 'asset/resource',
         },
-        // Raster Images
-        ...[/\.jpe?g$/i, /\.png$/i, /\.gif$/i, /\.webp$/i].map((pattern, index) => {
+        // Bitmap images
+        ...[/\.jpe?g$/i, /\.png$/i, /\.gif$/i, /\.webp$/i].map((regExp, index) => {
           const plugins = [imageminJpegtran(), imageminOptipng(), imageminGifsicle(), imageminWebp()];
           return {
-            test: pattern,
+            test: regExp,
             ...assetModuleOptions,
             use: [
               {
@@ -174,31 +151,32 @@ module.exports = () => {
         // svg
         {
           test: /\.svg$/i,
+          use: [
+            {
+              loader: 'img-loader',
+              options: {
+                plugins: [
+                  imageminSvgo({
+                    /** @type { any } */
+                    plugins: svgo.extendDefaultPlugins([
+                      { name: 'removeViewBox', active: false },
+                      { name: 'removeDimensions', active: true },
+                      { name: 'removeAttrs', active: true, params: { attrs: ['data.*'] } },
+                    ]),
+                  }),
+                ],
+              },
+            },
+          ],
           oneOf: [
             // inline svg
             {
               resourceQuery: /inline/,
               type: 'asset/source',
-              use: [imageminSvgOptions],
-            },
-            // sprite svg
-            {
-              resourceQuery: /sprite/,
-              use: [
-                {
-                  loader: 'svg-sprite-loader',
-                  options: {
-                    /** @type { SVGSpriteLoaderOptions } */
-                    symbolId: (filePath) => (typeof filePath === 'string' ? path.basename(filePath, '.svg') : ''),
-                  },
-                },
-                imageminSvgOptions,
-              ],
             },
             // default
             {
               ...assetModuleOptions,
-              use: [imageminSvgOptions],
             },
           ],
         },
@@ -267,7 +245,7 @@ module.exports = () => {
           });
         }),
       new MiniCssExtractPlugin({
-        filename: `${placeholder}.css`,
+        filename: `${placeholders}.css`,
       }),
       new WebpackFixStyleOnlyEntries({
         silent: !isProductionBuild,
@@ -275,7 +253,7 @@ module.exports = () => {
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: copyTarget,
+            from: targetsPatternToCopy,
             to: '[path][name][ext]',
             context: directory.src,
             noErrorOnMissing: true,

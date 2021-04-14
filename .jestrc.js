@@ -4,7 +4,7 @@
  */
 
 const path = require('path');
-const { directory, javascriptGlobPattern } = require('./config');
+const { directory, javascriptPattern } = require('./config');
 
 module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
@@ -20,5 +20,5 @@ module.exports = {
       tsconfig: 'tsconfig.json',
     },
   },
-  testMatch: [path.join('<rootDir>', `test/**/*.(spec|test).${javascriptGlobPattern}`)],
+  testMatch: [path.join('<rootDir>', `test/**/*.(spec|test).${javascriptPattern}`)],
 };

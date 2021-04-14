@@ -38,17 +38,6 @@ img(src= require('assets/images/foo.jpg'))
 != require('path/to/file.svg?inline')
 ```
 
-##### SVG Sprite
-Import the target svg file into your script.
-```typescript
-import 'path/to/file.svg?sprite'
-```
-The id for xlink:href is file name without extension.
-```pug
-svg
-  use(xlink:href="#file")
-```
-
 #### SCSS
 ```scss
 .foo {
