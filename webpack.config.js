@@ -9,7 +9,6 @@ const glob = require('glob');
 const path = require('path');
 const sass = require('sass');
 const fibers = require('fibers');
-const nodeSassGlobImporter = require('node-sass-glob-importer');
 const imageminJpegtran = require('imagemin-jpegtran');
 const imageminOptipng = require('imagemin-optipng');
 const imageminGifsicle = require('imagemin-gifsicle');
@@ -108,7 +107,6 @@ module.exports = () => {
                 implementation: sass,
                 sassOptions: {
                   fiber: fibers,
-                  importer: nodeSassGlobImporter(),
                 },
               },
             },
