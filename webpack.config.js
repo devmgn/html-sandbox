@@ -9,7 +9,7 @@ const glob = require('glob');
 const path = require('path');
 const sass = require('sass');
 const fibers = require('fibers');
-const imageminJpegtran = require('imagemin-jpegtran');
+const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminOptipng = require('imagemin-optipng');
 const imageminGifsicle = require('imagemin-gifsicle');
 const imageminWebp = require('imagemin-webp');
@@ -132,7 +132,7 @@ module.exports = () => {
         },
         // Bitmap images
         ...[/\.jpe?g$/i, /\.png$/i, /\.gif$/i, /\.webp$/i].map((regExp, index) => {
-          const plugins = [imageminJpegtran(), imageminOptipng(), imageminGifsicle(), imageminWebp()];
+          const plugins = [imageminMozjpeg(), imageminOptipng(), imageminGifsicle(), imageminWebp()];
           return {
             test: regExp,
             ...assetModuleOptions,
