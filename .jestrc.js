@@ -8,6 +8,7 @@ const { directory, javascriptPattern } = require('./config');
 
 module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.tsx?$': 'ts-jest',

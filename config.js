@@ -5,6 +5,7 @@
 /** @typedef { { src: string; dist: string; javascript: string; publicPath: string; } } Directory */
 
 const path = require('path');
+// eslint-disable-next-line import/extensions
 const { config } = require('./package.json');
 
 /**
