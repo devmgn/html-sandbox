@@ -1,0 +1,9 @@
+//
+// IE11 hack mixin
+//
+@mixin only-ie() {
+  @at-root _::-ms-backdrop,
+    & {
+    @content;
+  }
+}
