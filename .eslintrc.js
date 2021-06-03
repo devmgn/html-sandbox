@@ -12,14 +12,7 @@ module.exports = {
     browser: true,
     'jest/globals': true,
   },
-  extends: [
-    'airbnb',
-    'airbnb/hooks',
-    'plugin:react/recommended',
-    'plugin:jest/recommended',
-    'plugin:prettier/recommended',
-    'prettier',
-  ],
+  extends: ['airbnb-base', 'plugin:jest/recommended', 'plugin:prettier/recommended', 'prettier'],
   parserOptions: {
     sourceType: 'module',
     project: 'tsconfig.json',
@@ -48,7 +41,6 @@ module.exports = {
         singleQuote: true,
       },
     ],
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'import/extensions': [
       'error',
       'ignorePackages',

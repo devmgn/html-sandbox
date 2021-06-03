@@ -8,7 +8,6 @@
 const glob = require('glob');
 const path = require('path');
 const sass = require('sass');
-const fibers = require('fibers');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminOptipng = require('imagemin-optipng');
 const imageminGifsicle = require('imagemin-gifsicle');
@@ -105,9 +104,6 @@ module.exports = () => {
               options: {
                 ...sourceMap,
                 implementation: sass,
-                sassOptions: {
-                  fiber: fibers,
-                },
               },
             },
           ],

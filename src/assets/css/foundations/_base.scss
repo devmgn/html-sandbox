@@ -24,7 +24,7 @@
 // 1. Remove the grey highlight on links in iOS
 // 2. Improving font rendering in macOS
 // 3. Prevent adjustments of font size after orientation changes in iOS
-html {
+:root {
   font-family: $font-family-base;
   line-height: 1;
   word-wrap: break-word;
@@ -271,7 +271,7 @@ button,
 
 input,
 textarea {
-  border-radius: 0;
+  border-radius: initial;
   &:disabled {
     opacity: 1;
   }
