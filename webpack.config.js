@@ -8,11 +8,6 @@
 const glob = require('glob');
 const path = require('path');
 const sass = require('sass');
-const imageminMozjpeg = require('imagemin-mozjpeg');
-const imageminOptipng = require('imagemin-optipng');
-const imageminGifsicle = require('imagemin-gifsicle');
-const imageminWebp = require('imagemin-webp');
-const imageminSvgo = require('imagemin-svgo');
 const svgo = require('svgo');
 
 // webpack plugins
@@ -20,6 +15,7 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+const ImageMinimizerWebpackPlugin = require('image-minimizer-webpack-plugin');
 // @ts-ignore
 // TODO: fix types
 const WebpackFixStyleOnlyEntries = require('webpack-fix-style-only-entries');
@@ -127,41 +123,13 @@ module.exports = () => {
           type: 'asset/resource',
         },
         // Bitmap images
-        ...[/\.jpe?g$/i, /\.png$/i, /\.gif$/i, /\.webp$/i].map((regExp, index) => {
-          const plugins = [imageminMozjpeg(), imageminOptipng(), imageminGifsicle(), imageminWebp()];
-          return {
-            test: regExp,
-            ...assetModuleOptions,
-            use: [
-              {
-                loader: 'img-loader',
-                options: {
-                  plugins: [plugins[index]],
-                },
-              },
-            ],
-          };
-        }),
+        {
+          test: /\.(jpe?g|png|gif)$/i,
+          ...assetModuleOptions,
+        },
         // svg
         {
           test: /\.svg$/i,
-          use: [
-            {
-              loader: 'img-loader',
-              options: {
-                plugins: [
-                  imageminSvgo({
-                    /** @type { any } */
-                    plugins: svgo.extendDefaultPlugins([
-                      { name: 'removeViewBox', active: false },
-                      { name: 'removeDimensions', active: true },
-                      { name: 'removeAttrs', active: true, params: { attrs: ['data.*'] } },
-                    ]),
-                  }),
-                ],
-              },
-            },
-          ],
           oneOf: [
             // inline svg
             {
@@ -238,6 +206,25 @@ module.exports = () => {
             isProduction: isProductionBuild,
           });
         }),
+      new ImageMinimizerWebpackPlugin({
+        minimizerOptions: {
+          plugins: [
+            'mozjpeg',
+            'gifsicle',
+            'pngquant',
+            [
+              'svgo',
+              {
+                plugins: svgo.extendDefaultPlugins([
+                  { name: 'removeViewBox', active: false },
+                  { name: 'removeDimensions', active: true },
+                  { name: 'removeAttrs', active: true, params: { attrs: ['data.*'] } },
+                ]),
+              },
+            ],
+          ],
+        },
+      }),
       new MiniCssExtractPlugin({
         filename: `${placeholders}.css`,
       }),
