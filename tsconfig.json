@@ -75,6 +75,6 @@
     "resolveJsonModule": true,
   },
   "files": ["config.js", "webpack.config.js"],
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

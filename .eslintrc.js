@@ -10,23 +10,8 @@ module.exports = {
   env: {
     es2021: true,
     browser: true,
-    'jest/globals': true,
   },
-  extends: ['airbnb-base', 'plugin:jest/recommended', 'plugin:prettier/recommended', 'prettier'],
-  parserOptions: {
-    sourceType: 'module',
-    project: 'tsconfig.json',
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  settings: {
-    'import/resolver': {
-      typescript: {
-        config: 'webpack.config.js',
-      },
-    },
-  },
+  extends: ['airbnb-base', 'plugin:prettier/recommended', 'prettier'],
   rules: {
     'no-console': [
       'error',
@@ -34,22 +19,17 @@ module.exports = {
         allow: ['error', 'warn'],
       },
     ],
-    'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+    'lines-between-class-members': [
+      'error',
+      'always',
+      {
+        exceptAfterSingleLine: true,
+      },
+    ],
     'prettier/prettier': [
       'error',
       {
         singleQuote: true,
-      },
-    ],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-        json: 'never',
       },
     ],
   },
@@ -60,7 +40,16 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
       ],
-      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: 'tsconfig.json',
+      },
+      settings: {
+        'import/resolver': {
+          typescript: {
+            project: './',
+          },
+        },
+      },
     },
   ],
   ignorePatterns: ['node_modules', '!.*rc.js', directory.dist],
