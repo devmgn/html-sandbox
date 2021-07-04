@@ -71,7 +71,7 @@
     "friendly-errors-webpack-plugin": "1.7.0",
     "glob": "7.1.7",
     "html-webpack-plugin": "5.3.2",
-    "husky": "6.0.0",
+    "husky": "7.0.0",
     "image-minimizer-webpack-plugin": "2.2.0",
     "imagemin-gifsicle": "7.0.0",
     "imagemin-mozjpeg": "9.0.0",
