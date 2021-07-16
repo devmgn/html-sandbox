@@ -41,6 +41,6 @@ img(src= require('assets/images/foo.jpg'))
 #### SCSS
 ```scss
 .foo {
-  background-image: url(~assets/images/foo.jpg)
+  background-image: url(assets/images/foo.jpg)
 }
 ```
